@@ -4,7 +4,7 @@ import 'package:v2es/util/http_util.dart';
 import 'package:html/parser.dart' as html_parse;
 
 void main() async {
-  var resp = await HttpUtil.get("http://www.cip.cc/");
+  var resp = await HttpUtil.get("https://www.cip.cc/");
   var document = html_parse.parse(resp);
   var elements = document.getElementsByTagName("pre");
   for (var e in elements) {
