@@ -4,7 +4,7 @@ import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
 
 class ReqClient {
-  static const bool proxyEnable = false;
+  static const bool proxyEnable = true;
   static const proxyHost = '127.0.0.1';
   static const proxyPort = 7890;
 
@@ -188,8 +188,8 @@ class ErrorInterceptor extends Interceptor {
     Response response,
     ResponseInterceptorHandler handler,
   ) {
-    debugPrint(
-        "\n===DioResponse Start===\n<< DioResponse: ${response.data.toString()}\n===DioResponse End===\n");
+    // debugPrint(
+    // "\n===DioResponse Start===\n<< DioResponse: ${response.data.toString()}\n===DioResponse End===\n");
     super.onResponse(response, handler);
   }
 

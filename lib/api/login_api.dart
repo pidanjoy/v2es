@@ -3,20 +3,15 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as html_parse;
-import 'package:v2es/util/http_client.dart';
 
-import '../model/user_model.dart';
+import '../model/login_model.dart';
+import '../constant/base_constant.dart';
+import '../util/http_util.dart';
 
 class LoginApi {
-  static const v2exUrl = "https://www.v2ex.com";
-
-  static const loginKeyUrl = "$v2exUrl/signin";
-  static const captchaImageUrl = "$v2exUrl/_captcha";
-  static const loginUrl = "$v2exUrl/signin";
-
-  Future<LoginKey?> getLoginKey() async {
+  static Future<LoginKey?> getLoginKey() async {
     String? cookie, username, password, captcha, once, next;
-    Response response = await ReqClient().get(loginKeyUrl);
+    Response response = await HttpUtil.get(ApiEndpoints.loginKeyUrl);
     cookie = response.headers["set-cookie"]!.join(";");
 
     var document = html_parse.parse(response.data);
@@ -63,13 +58,14 @@ class LoginApi {
         next: next);
   }
 
-  Future<Uint8List> getCaptchaImage(Map<String, dynamic> hearders) async {
-    Response response = await ReqClient().get(captchaImageUrl,
+  static Future<Uint8List> getCaptchaImage(
+      Map<String, dynamic> hearders) async {
+    Response response = await HttpUtil.get(ApiEndpoints.captchaImageUrl,
         options: Options(responseType: ResponseType.bytes, headers: hearders));
     return response.data;
   }
 
-  Future<String?> loginPickCookie(
+  static Future<String?> loginPickCookie(
       LoginParams loginParams, Map<String, dynamic> hearders) async {
     Map<String, dynamic> params = {
       loginParams.usernameKey: loginParams.usernameValue,
@@ -83,8 +79,8 @@ class LoginApi {
         followRedirects: false,
         validateStatus: (status) => null == status ? false : status < 500);
 
-    Response response =
-        await ReqClient().postForm(loginUrl, params, options: options);
+    Response response = await HttpUtil.postForm(ApiEndpoints.loginUrl, params,
+        options: options);
     if (response.statusCode == 302) {
       return response.headers["set-cookie"]!.join(";");
     } else {

@@ -1,1 +1,3 @@
+class Topic {}
 
+class Tag {}
