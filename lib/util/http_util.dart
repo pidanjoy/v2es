@@ -21,4 +21,32 @@ class HttpUtil {
       options: options,
     );
   }
+
+  static Future post(
+    String path, {
+    Map<String, dynamic>? queryParams,
+    dynamic data,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    var response = await ReqClient().post(
+      path,
+      data: data,
+      queryParams: queryParams,
+      options: requestOptions,
+    );
+    return response.data;
+  }
+
+  static Future postForm(
+    String path,
+    Map<String, dynamic> params, {
+    Options? options,
+  }) async {
+    return await ReqClient().postForm(
+      path,
+      params,
+      options: options,
+    );
+  }
 }

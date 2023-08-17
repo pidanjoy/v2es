@@ -68,12 +68,42 @@ class ReqClient {
     Options? options,
   }) async {
     Options requestOptions = options ?? Options();
-    var response = await dio!.get(
+    Response response = await dio!.get(
       path,
       queryParameters: params,
       options: requestOptions,
     );
-    return response.data;
+    return response;
+  }
+
+  Future post(
+    String path, {
+    Map<String, dynamic>? queryParams,
+    dynamic data,
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    var response = await dio!.post(
+      path,
+      data: data,
+      queryParameters: queryParams,
+      options: requestOptions,
+    );
+    return response;
+  }
+
+  Future postForm(
+    String path,
+    Map<String, dynamic> params, {
+    Options? options,
+  }) async {
+    Options requestOptions = options ?? Options();
+    var response = await dio!.post(
+      path,
+      data: FormData.fromMap(params),
+      options: requestOptions,
+    );
+    return response;
   }
 }
 
