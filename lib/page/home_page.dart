@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/widget/topic_list_widget.dart';
 
-import '../widget/search_widget.dart';
+import '../widget/search_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -25,15 +26,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(
-        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // title: Text(widget.title),
+      // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      // title: Text(widget.title),
       // ),
-      body: Container(
-        alignment: Alignment.center,
-        child: initPageView(),
+      body: SafeArea(
+        child: Container(alignment: Alignment.center, child: initPageView()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: initFloatingActionButton(),
+      // floatingActionButton: initFloatingActionButton(),
       bottomNavigationBar: initBottomNavigationBar(),
     );
   }
@@ -47,7 +47,15 @@ class _HomePageState extends State<HomePage> {
         });
       },
       children: [
-        Container(child: MySearchBar(),),
+        Container(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              const MySearchBar(),
+              Expanded(child: TopicList()),
+            ],
+          ),
+        ),
         initPageViewItem("xx"),
         initPageViewItem("发布主题"),
         initPageViewItem("xx"),
@@ -92,18 +100,18 @@ class _HomePageState extends State<HomePage> {
         });
         _pageController.jumpToPage(_index);
       },
-
       items: [
         initBottomNavigationBarItem("首页", Icons.colorize, Icons.colorize),
-        initBottomNavigationBarItem("xx", Icons.cancel, Icons.cancel),
-        initBottomNavigationBarItem("发布", Icons.cancel, Icons.cancel),
-        initBottomNavigationBarItem("xx", Icons.android, Icons.android),
+        initBottomNavigationBarItem("记事本", Icons.cancel, Icons.cancel),
+        initBottomNavigationBarItem("写作", Icons.cancel, Icons.cancel),
+        initBottomNavigationBarItem("时间轴", Icons.android, Icons.android),
         initBottomNavigationBarItem("我的", Icons.ios_share, Icons.ios_share),
       ],
     );
   }
 
-  initBottomNavigationBarItem(String title, IconData icon, IconData activeIcon) {
+  initBottomNavigationBarItem(
+      String title, IconData icon, IconData activeIcon) {
     return BottomNavigationBarItem(
       label: title,
       icon: Icon(
