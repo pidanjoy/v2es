@@ -12,7 +12,7 @@ class TopicList extends StatefulWidget {
 class _TopicListState extends State<TopicList> {
   final List<Article> articles = [
     Article(
-        "想买点黄金，想问下 V 友们有哪些购买途径，哪种最好",
+        "想买点黄金",
         "作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx",
         "2023-08-21",
         "程序员",
@@ -39,7 +39,8 @@ class _TopicListState extends State<TopicList> {
               ? articles.length + 1
               : articles.length + (_noMoreItems ? 1 : 0),
           separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(height: 0); // 分隔符（间距）
+            // return const SizedBox(height: 0); // 分隔符（间距）
+            return const Divider();
           },
           itemBuilder: (BuildContext context, int index) {
             if (_isLoadingMore && index == articles.length) {
@@ -56,7 +57,13 @@ class _TopicListState extends State<TopicList> {
                   height: 32,
                   width: 32,
                   color: Colors.grey,
-                  child: Image.network("https://crates.io/assets/cargo.png"),
+                  child: Image.network(
+                    "https://crates.io/assets/cargo.png",
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return const Text('error');
+                    },
+                  ),
                 ),
               ),
               title: Row(
@@ -122,17 +129,17 @@ class _TopicListState extends State<TopicList> {
                     width: 5,
                   ),
                   const Text(
-                    '5分钟前',
+                    '50分钟前',
                     style: TextStyle(fontSize: 10),
                   ),
                   Expanded(child: Container()),
                   const CircleAvatar(
-                      radius: 8.0,
+                      radius: 8.5,
                       backgroundColor: Colors.grey,
                       child: Text(
                         "56",
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 9,
                           color: Colors.white,
                         ),
                       )),
@@ -176,13 +183,15 @@ class _TopicListState extends State<TopicList> {
 
   void _startNoMoreItemsTimer() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _isLoadingMore = false;
-        _noMoreItems = true;
-        articles.add(Article("终了1", "Author C", "2023-08-19", "Art", "User Z"));
-        articles.add(Article("终了2", "Author C", "2023-08-19", "Art", "User Z"));
-        articles.add(Article("终了3", "Author C", "2023-08-19", "Art", "User Z"));
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingMore = false;
+          _noMoreItems = true;
+          articles.add(Article("终了1", "Author C", "2023-08-19", "Art", "User Z"));
+          articles.add(Article("终了2", "Author C", "2023-08-19", "Art", "User Z"));
+          articles.add(Article("终了3", "Author C", "2023-08-19", "Art", "User Z"));
+        });
+      }
     });
   }
 }
