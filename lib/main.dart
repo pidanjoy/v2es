@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:v2es/page/home_page.dart';
+import 'package:v2es/page/search_page.dart';
+import 'package:v2es/page/unknown_page.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -20,6 +22,20 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(title: 'V2ES'),
       debugShowCheckedModeBanner: false,
+      routes: {
+        "/home": (context) => const HomePage(title: 'V2ES'),
+      },
+      onGenerateRoute: (setting) {
+        switch (setting.name) {
+          case "/search":
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const SearchPage(),
+            );
+          default:
+            return MaterialPageRoute(builder: (context) => const UnknownPage());
+        }
+      },
     );
   }
 }

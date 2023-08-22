@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/page/my_page.dart';
+import 'package:v2es/page/notebook_page.dart';
+import 'package:v2es/page/timeline_page.dart';
+import 'package:v2es/page/write_page.dart';
+import 'package:v2es/widget/search_bar_widget.dart';
 import 'package:v2es/widget/topic_list_widget.dart';
-
-import '../widget/search_bar_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -33,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         child: Container(alignment: Alignment.center, child: initPageView()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButton: initFloatingActionButton(),
+      floatingActionButton: initFloatingActionButton(),
       bottomNavigationBar: initBottomNavigationBar(),
     );
   }
@@ -49,24 +52,18 @@ class _HomePageState extends State<HomePage> {
       children: [
         Container(
           alignment: Alignment.topLeft,
-          child: Column(
+          child: const Column(
             children: [
-              const MySearchBar(),
+              MySearchBar(isFixed: true,),
               Expanded(child: TopicList()),
             ],
           ),
         ),
-        initPageViewItem("xx"),
-        initPageViewItem("发布主题"),
-        initPageViewItem("xx"),
-        initPageViewItem("我的"),
+        const NotebookPage(),
+        const WritePage(),
+        const TimelinePage(),
+        const MyPage(),
       ],
-    );
-  }
-
-  initPageViewItem(String s) {
-    return Container(
-      child: Text(s),
     );
   }
 
@@ -77,21 +74,31 @@ class _HomePageState extends State<HomePage> {
             border: Border.all(color: Colors.white, width: 3),
             borderRadius: BorderRadius.circular(40)),
         child: FloatingActionButton(
-          backgroundColor: _index == 2 ? Colors.yellow : Colors.grey,
-          elevation: 10,
+          backgroundColor: _index == 2 ? Colors.deepPurple : Colors.white,
+          elevation: 5,
           onPressed: () {
             setState(() {
               _index = 2;
               _pageController.jumpToPage(_index);
             });
           },
-          child: const Icon(Icons.android),
+          child: _index == 2
+              ? const Icon(
+                  Icons.edit,
+                  size: 32,
+                  color: Colors.white,
+                )
+              : const Icon(
+                  Icons.edit_calendar_rounded,
+                  size: 32,
+                  color: Colors.grey,
+                ),
         ));
   }
 
   BottomNavigationBar initBottomNavigationBar() {
     return BottomNavigationBar(
-      selectedItemColor: Colors.lightGreen,
+      selectedItemColor: Colors.deepPurple,
       type: BottomNavigationBarType.fixed,
       currentIndex: _index,
       onTap: (index) {
@@ -101,11 +108,16 @@ class _HomePageState extends State<HomePage> {
         _pageController.jumpToPage(_index);
       },
       items: [
-        initBottomNavigationBarItem("首页", Icons.colorize, Icons.colorize),
-        initBottomNavigationBarItem("记事本", Icons.cancel, Icons.cancel),
-        initBottomNavigationBarItem("写作", Icons.cancel, Icons.cancel),
-        initBottomNavigationBarItem("时间轴", Icons.android, Icons.android),
-        initBottomNavigationBarItem("我的", Icons.ios_share, Icons.ios_share),
+        initBottomNavigationBarItem(
+            "首页", Icons.home_rounded, Icons.home_work_rounded),
+        initBottomNavigationBarItem(
+            "记事本", Icons.book_rounded, Icons.menu_book_rounded),
+        initBottomNavigationBarItem(
+            "写作", Icons.note_add_rounded, Icons.note_alt_rounded),
+        initBottomNavigationBarItem(
+            "时间轴", Icons.linear_scale, Icons.linear_scale_rounded),
+        initBottomNavigationBarItem(
+            "我的", Icons.android_rounded, Icons.insert_emoticon_rounded),
       ],
     );
   }
@@ -120,7 +132,7 @@ class _HomePageState extends State<HomePage> {
       ),
       activeIcon: Icon(
         activeIcon,
-        color: Colors.lightGreen,
+        color: Colors.deepPurple,
       ),
     );
   }
