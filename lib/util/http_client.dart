@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ReqClient {
   static const bool proxyEnable = true;
-  static const proxyHost = '127.0.0.1';
+  static const proxyHost = '192.168.2.175';
   static const proxyPort = 7890;
 
   static const int _connectTimeout = 30000;
