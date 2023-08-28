@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:v2es/page/search_page.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar({super.key, required this.isFixed, this.onSearch});
@@ -97,6 +96,7 @@ class _MySearchBarState extends State<MySearchBar> {
             ],
           )
         : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                   margin: const EdgeInsets.only(top: 5, bottom: 2),
@@ -128,7 +128,8 @@ class _MySearchBarState extends State<MySearchBar> {
                                   textBaseline: TextBaseline.alphabetic),
                             ),
                             cursorHeight: 22,
-                            style: TextStyle(textBaseline: TextBaseline.ideographic),
+                            style: const TextStyle(
+                                textBaseline: TextBaseline.ideographic),
                             controller: _controller,
                           ),
                         ),

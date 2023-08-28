@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TopicPage extends StatefulWidget {
-  const TopicPage({super.key});
+  const TopicPage({super.key, required this.tid});
+
+  final String tid;
 
   @override
   State<TopicPage> createState() => _TopicPageState();
