@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/api/node_api.dart';
+import 'package:v2es/model/node_model.dart';
 import 'package:v2es/page/my_page.dart';
 import 'package:v2es/page/notebook_page.dart';
 import 'package:v2es/page/timeline_page.dart';
@@ -19,9 +21,18 @@ class _HomePageState extends State<HomePage> {
   int _index = 0;
   late PageController _pageController;
 
+  List<Plan> _planList = [];
+
+  void initNode() async {
+    // List<Node> nodeList = await NodeApi.getAllList();
+    _planList = await NodeApi.getPlanList();
+    NodeApi.getHomeTopics();
+  }
+
   @override
   void initState() {
     _pageController = PageController();
+    initNode();
     super.initState();
   }
 
