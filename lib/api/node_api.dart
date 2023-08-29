@@ -3,49 +3,111 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:v2es/constant/base_constant.dart';
+import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/node_model.dart';
+import 'package:v2es/model/topic_model.dart';
+import 'package:v2es/util/db_util.dart';
 import 'package:v2es/util/http_util.dart';
 
 import 'package:html/parser.dart' as html_parse;
 
 class NodeApi {
-  static Future<List<String>> getHomeTopics(
-  {Map<String, dynamic>? headers}) async {
+  static Future<HomeData> getHomeData({Map<String, dynamic>? headers}) async {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }
     Response response = await HttpUtil.get(ApiEndpoints.baseUrl);
     var document = html_parse.parse(response.data);
+
+    List<NodeTab> tabList = [];
     var eleTabs = document.querySelectorAll('a[href^="/?tab="]');
-    var tabs = [];
     for (var tab in eleTabs) {
       debugPrint(
           "${tab.text}：${tab.attributes['href']} ${tab.attributes['class'] == 'tab_current' ? '*' : ''}");
+      var tabName = tab.text;
+      var tabHref = tab.attributes['href'];
+      if (null != tabHref) {
+        tabList.add(NodeTab(tabName, tabHref));
+      }
     }
-    var eleTopicLinks = document.getElementsByClassName("topic-link");
-    debugPrint("------------------Topic------------------");
-    List<String> topics = [];
-    for (var topic in eleTopicLinks) {
-      debugPrint("${topic.attributes['href']}：${topic.text}");
-      topics.add(topic.attributes['href']!);
+
+    var eleTopicList = document.getElementsByClassName('cell item');
+    List<TopicHead> topicHeadList = [];
+    for (var item in eleTopicList) {
+      var eleTds = item.getElementsByTagName("td");
+      if (eleTds.isNotEmpty && eleTds.length == 4) {
+        var avatar = eleTds[0].querySelector("img")?.attributes['src'];
+        var eleTopicLink = eleTds[2].querySelector("a[class='topic-link']");
+        if (null != eleTopicLink) {
+          var title = eleTopicLink.text;
+          var href = eleTopicLink.attributes['href'];
+
+          var eleTopicInfo =
+              eleTds[2].querySelector("span[class='topic_info']");
+          var eleTopicNodeInfo = eleTopicInfo?.querySelector("a[class='node']");
+          var nodeHref = eleTopicNodeInfo?.attributes['href'];
+          var nodeTitle = eleTopicNodeInfo?.text;
+          var eleStrongTags = eleTopicInfo?.querySelectorAll("strong");
+          String? authorHref, authorName, lastReplyHref, lastReplyName;
+          if (null != eleStrongTags) {
+            authorHref = eleStrongTags[0].firstChild?.attributes['href'];
+            authorName = eleStrongTags[0].firstChild?.text;
+            if (eleStrongTags.length > 1) {
+              lastReplyHref = eleStrongTags[1].firstChild?.attributes['href'];
+              lastReplyName = eleStrongTags[1].firstChild?.text;
+            }
+          }
+          DateTime? lastReplyTime;
+          var replyTime =
+              eleTopicInfo?.getElementsByTagName("span")[0].attributes['title'];
+          if (null != replyTime) {
+            lastReplyTime = DateTime.tryParse(replyTime);
+          }
+
+          if (null != href) {
+            topicHeadList.add(TopicHead(title, href,
+                authorHref: authorHref,
+                authorName: authorName,
+                avatar: avatar,
+                nodeHref: nodeHref,
+                nodeTitle: nodeTitle,
+                lastReplyHref: lastReplyHref,
+                lastReplyTime: lastReplyTime,
+                lastReplyName: lastReplyName));
+          }
+        }
+      }
     }
-    debugPrint("------------------Hot------------------");
+
+    for (var item in topicHeadList) {
+      DatabaseHelper.instance.insertTopic(item);
+    }
+
+    List<TopicHead> topicHotList = [];
     var eleHotTopics =
         document.getElementById("TopicsHot")?.getElementsByTagName("table");
     if (null != eleHotTopics) {
       for (var ht in eleHotTopics) {
         var eleArr = ht.getElementsByTagName('a');
         if (eleArr.isNotEmpty && eleArr.length > 1) {
-          var memberUrl = eleArr[0].attributes['href'];
-          var avatarUrl =
+          var hotAuthorHref = eleArr[0].attributes['href'];
+          var hotAvatar =
               eleArr[0].getElementsByTagName("img")[0].attributes['src'];
-          var topicTitle = eleArr[1].text;
-          var topicUrl = eleArr[1].attributes['href'];
-          debugPrint("$memberUrl,$avatarUrl,$topicTitle,$topicUrl");
+          var hotTitle = eleArr[1].text;
+          var hotHref = eleArr[1].attributes['href'];
+          debugPrint("$hotAuthorHref,$hotAvatar,$hotTitle,$hotHref");
+          if (null != hotHref) {
+            topicHotList.add(TopicHead(hotTitle, hotHref,
+                avatar: hotAvatar, authorHref: hotAuthorHref));
+          }
         }
       }
     }
-    return topics;
+    return HomeData()
+      ..set(
+          tabList: tabList,
+          topicHeadList: topicHeadList,
+          topicHotList: topicHotList);
   }
 
   static Future<List<Node>> getAllList() async {

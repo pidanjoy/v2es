@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:v2es/util/http_client.dart';
 
 class HttpUtil {
-  static void ins({ReqClientOptions? options}) {
-    ReqClient(options: options);
+  static Dio ins({ReqClientOptions? options}) {
+    return ReqClient(options: options).dio!;
   }
 
   static void setHeaders(Map<String, dynamic> map) {
@@ -48,5 +48,10 @@ class HttpUtil {
       params,
       options: options,
     );
+  }
+
+  static Future loadImage(String path, {Map<String, dynamic>? params}) async {
+    
+    return await ReqClient().loadImage(path, params);
   }
 }

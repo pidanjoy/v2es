@@ -1,4 +1,9 @@
-class Tab {}
+class NodeTab {
+  String name;
+  String href;
+
+  NodeTab(this.name, this.href);
+}
 
 class Node {
   String name;
