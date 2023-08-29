@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/model/topic_model.dart';
 
 class MySearchBar extends StatefulWidget {
-  const MySearchBar({super.key, required this.isFixed, this.onSearch});
+  const MySearchBar({super.key, required this.isFixed, this.onSearch, this.topicHotList});
 
   final Function(String)? onSearch;
   final bool isFixed;
+  final List<TopicHead>? topicHotList;
 
   @override
   State<MySearchBar> createState() => _MySearchBarState();
 }
 
 class _MySearchBarState extends State<MySearchBar> {
-  List<String> textList = ["请输入搜索内容1", "请输入搜索内容2", "请输入搜索内容3"];
+  List<TopicHead> _textList = [];
   int currentIndex = 0;
   double opacity = 1.0;
 
@@ -21,6 +23,9 @@ class _MySearchBarState extends State<MySearchBar> {
   void initState() {
     super.initState();
     startTextAnimation();
+    if (null != widget.topicHotList) {
+      _textList = widget.topicHotList!;
+    }
   }
 
   void startTextAnimation() {
@@ -35,7 +40,7 @@ class _MySearchBarState extends State<MySearchBar> {
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
-          currentIndex = (currentIndex + 1) % textList.length;
+          currentIndex = (currentIndex + 1) % _textList.length;
           opacity = 1.0;
         });
         startTextAnimation();
@@ -75,7 +80,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       opacity: opacity,
                       duration: const Duration(seconds: 2),
                       child: Text(
-                        textList[currentIndex],
+                        _textList[currentIndex].title,
                         style:
                             const TextStyle(fontSize: 12.5, color: Colors.grey),
                         overflow: TextOverflow.ellipsis,

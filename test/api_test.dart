@@ -20,8 +20,5 @@ void main() {
 
     LoginKey? loginKey = await LoginApi.getLoginKey();
     assert(loginKey?.cookie != null);
-
-    List<String> topics = await NodeApi.getHomeTopics();
-    debugPrint(topics.toString());
   });
 }

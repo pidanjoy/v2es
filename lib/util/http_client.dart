@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class ReqClient {
   static const int _receiveTimeout = 30000;
 
   static final ReqClient _instance = ReqClient._internal();
+
   factory ReqClient({ReqClientOptions? options}) => _instance;
 
   Dio? dio;
@@ -104,6 +106,22 @@ class ReqClient {
       options: requestOptions,
     );
     return response;
+  }
+
+  Future<Uint8List?> loadImage(
+      String path, Map<String, dynamic>? params) async {
+    try {
+      var response = await dio!
+          .get(path, options: Options(responseType: ResponseType.stream));
+      final stream = await (response.data as ResponseBody).stream.toList();
+      final result = BytesBuilder();
+      for (Uint8List subList in stream) {
+        result.add(subList);
+      }
+      return result.takeBytes();
+    } on DioException catch (_) {
+      return null;
+    }
   }
 }
 

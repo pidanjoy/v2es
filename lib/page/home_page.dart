@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:v2es/api/node_api.dart';
+import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/node_model.dart';
 import 'package:v2es/page/my_page.dart';
 import 'package:v2es/page/notebook_page.dart';
@@ -17,34 +18,38 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   int _index = 0;
   late PageController _pageController;
-
+  late HomeData _homeData;
   List<Plan> _planList = [];
 
-  void initNode() async {
-    // List<Node> nodeList = await NodeApi.getAllList();
+  @override
+  bool get wantKeepAlive => true;
+
+  Future<void> _initHome() async {
+    // await NodeApi.getAllList();
+    _homeData = await NodeApi.getHomeData();
     _planList = await NodeApi.getPlanList();
-    NodeApi.getHomeTopics();
   }
 
   @override
   void initState() {
-    _pageController = PageController();
-    initNode();
     super.initState();
+    _pageController = PageController();
+    _initHome();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       // title: Text(widget.title),
       // ),
       body: SafeArea(
-        child: Container(alignment: Alignment.center, child: initPageView()),
+        child: Container(alignment: Alignment.center, child: buildView()),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: initFloatingActionButton(),
@@ -52,30 +57,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  PageView initPageView() {
-    return PageView(
-      controller: _pageController,
-      onPageChanged: (index) {
-        setState(() {
-          _index = index;
+  FutureBuilder<void> buildView() {
+    return FutureBuilder(
+        future: _initHome(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text("Error: ${snapshot.error}");
+          } else {
+            return PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _index = index;
+                });
+              },
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    children: [
+                      MySearchBar(
+                        isFixed: true,
+                        topicHotList: _homeData.topicHotList,
+                      ),
+                      Expanded(
+                        child:
+                            TopicList(topicHeadList: _homeData.topicHeadList),
+                      ),
+                    ],
+                  ),
+                ),
+                const NotebookPage(),
+                const WritePage(),
+                const TimelinePage(),
+                const MyPage(),
+              ],
+            );
+          }
         });
-      },
-      children: [
-        Container(
-          alignment: Alignment.topLeft,
-          child: const Column(
-            children: [
-              MySearchBar(isFixed: true,),
-              Expanded(child: TopicList()),
-            ],
-          ),
-        ),
-        const NotebookPage(),
-        const WritePage(),
-        const TimelinePage(),
-        const MyPage(),
-      ],
-    );
   }
 
   Widget initFloatingActionButton() {

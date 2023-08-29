@@ -1,69 +1,78 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:v2es/model/topic_model.dart';
+import 'package:v2es/util/http_util.dart';
+import 'package:v2es/widget/image_load_widget.dart';
 
 import '../util/common_util.dart';
 
 class TopicList extends StatefulWidget {
-  const TopicList({super.key});
+  const TopicList({super.key, required this.topicHeadList});
+
+  final List<TopicHead> topicHeadList;
 
   @override
   State<TopicList> createState() => _TopicListState();
 }
 
-class _TopicListState extends State<TopicList> {
-  final List<Article> articles = [
-    Article(
-        "想买点黄金",
-        "作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx作者xx",
-        "2023-08-21",
-        "程序员",
-        "User X"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Science", "User Y"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    Article("标题xxx", "作者xx", "2023-08-21", "Art", "User Z"),
-    // Add more articles here
-  ];
-
+class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixin {
   bool _isLoadingMore = true;
   bool _noMoreItems = true;
+  List<TopicHead> _topicHeadList = [];
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _topicHeadList = widget.topicHeadList;
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return RefreshIndicator(
         onRefresh: _refreshArticles,
         child: ListView.separated(
           itemCount: _isLoadingMore
-              ? articles.length + 1
-              : articles.length + (_noMoreItems ? 1 : 0),
+              ? _topicHeadList.length + 1
+              : _topicHeadList.length + (_noMoreItems ? 1 : 0),
           separatorBuilder: (BuildContext context, int index) {
-            // return const SizedBox(height: 0); // 分隔符（间距）
-            return const Divider();
+            return const SizedBox(height: 0);
+            // return const Divider();
           },
           itemBuilder: (BuildContext context, int index) {
-            if (_isLoadingMore && index == articles.length) {
+            if (_isLoadingMore && index == _topicHeadList.length) {
               _startNoMoreItemsTimer();
               return _buildLoadingIndicator();
             }
-            if (_noMoreItems && index == articles.length) {
+            if (_noMoreItems && index == _topicHeadList.length) {
               return _buildNoMoreItemsText();
             }
             return ListTile(
-              leading: ClipRRect(
+              leading:
+              ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Container(
                   height: 32,
                   width: 32,
                   color: Colors.grey,
-                  child: Image.network(
-                    "https://crates.io/assets/cargo.png",
-                    errorBuilder: (BuildContext context, Object exception,
-                        StackTrace? stackTrace) {
-                      return const Text('error');
-                    },
-                  ),
+                  child: ImageLoader(imageUrl: _topicHeadList[index].avatar ??
+                      "https://crates.io/assets/cargo.png",),
+                  // FutureBuilder(
+                  //   future: HttpUtil.loadImage(_topicHeadList[index].avatar ??
+                  //        "https://crates.io/assets/cargo.png"),
+                  //   builder: (context, snapshot) {
+                  //     if (snapshot.connectionState == ConnectionState.waiting) {
+                  //       return const CircularProgressIndicator();
+                  //     } else if (snapshot.hasError) {
+                  //       return Text("Error: ${snapshot.error}");
+                  //     } else {
+                  //       return Image.memory(snapshot.data);
+                  //     }
+                  //   },
+                  // ),
                 ),
               ),
               title: Row(
@@ -74,7 +83,7 @@ class _TopicListState extends State<TopicList> {
                     size: 10,
                   ),
                   const Text(
-                    '10',
+                    '1',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
@@ -84,7 +93,7 @@ class _TopicListState extends State<TopicList> {
                   const SizedBox(width: 2),
                   Flexible(
                     child: Text(
-                      articles[index].title,
+                      _topicHeadList[index].title,
                       style: const TextStyle(fontSize: 12.5),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -103,7 +112,7 @@ class _TopicListState extends State<TopicList> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
-                      " • ${articles[index].tag} ",
+                      " • ${_topicHeadList[index].nodeTitle} ",
                       style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -121,7 +130,8 @@ class _TopicListState extends State<TopicList> {
                   //   width: 5,
                   // ),
                   Text(
-                    CommonUtil.limitText(articles[index].author, 10),
+                    CommonUtil.limitText(
+                        _topicHeadList[index].authorName ?? "", 10),
                     style: const TextStyle(
                         fontSize: 10, fontWeight: FontWeight.w600),
                   ),
@@ -133,12 +143,12 @@ class _TopicListState extends State<TopicList> {
                     style: TextStyle(fontSize: 10),
                   ),
                   Expanded(child: Container()),
-                  const CircleAvatar(
+                  CircleAvatar(
                       radius: 8.5,
                       backgroundColor: Colors.grey,
                       child: Text(
-                        "56",
-                        style: TextStyle(
+                        _topicHeadList[index].replyQty?.toString() ?? "-",
+                        style: const TextStyle(
                           fontSize: 9,
                           color: Colors.white,
                         ),
@@ -187,9 +197,9 @@ class _TopicListState extends State<TopicList> {
         setState(() {
           _isLoadingMore = false;
           _noMoreItems = true;
-          articles.add(Article("终了1", "Author C", "2023-08-19", "Art", "User Z"));
-          articles.add(Article("终了2", "Author C", "2023-08-19", "Art", "User Z"));
-          articles.add(Article("终了3", "Author C", "2023-08-19", "Art", "User Z"));
+          _topicHeadList.add(TopicHead("终了1", "Author C"));
+          _topicHeadList.add(TopicHead("终了2", "Author C"));
+          _topicHeadList.add(TopicHead("终了3", "Author C"));
         });
       }
     });
