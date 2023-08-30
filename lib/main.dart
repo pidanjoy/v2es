@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:v2es/api/node_api.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/home_page.dart';
 import 'package:v2es/page/search_page.dart';
 import 'package:v2es/page/unknown_page.dart';
 
 void main() async {
-  final homeData = HomeData();
+  WidgetsFlutterBinding.ensureInitialized();
+  HomeData homeData = await NodeApi.getHomeData();
+  debugPrint("main >>> ${jsonEncode(homeData.topicHeadList[0])}");
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: homeData),

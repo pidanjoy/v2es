@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'g/topic_model.g.dart';
+
 class Topic {}
 
+@JsonSerializable()
 class TopicHead {
   String title;
   String href;
@@ -26,22 +31,10 @@ class TopicHead {
       this.lastReplyName,
       this.lastReplyHref});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'href': href,
-      'authorName': authorName,
-      'authorHref': authorHref,
-      'avatar': avatar,
-      'nodeTitle': nodeTitle,
-      'nodeHref': nodeHref,
-      'replyQty': replyQty,
-      'rankUp': rankUp,
-      'lastReplyTime': lastReplyTime?.toIso8601String(),
-      'lastReplyName': lastReplyName,
-      'lastReplyHref': lastReplyHref,
-    };
-  }
+  factory TopicHead.fromJson(Map<String, dynamic> json) =>
+      _$TopicHeadFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TopicHeadToJson(this);
 }
 
 class TopicTab {

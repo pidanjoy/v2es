@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:v2es/util/common_util.dart';
+import 'package:v2es/util/file_util.dart';
 
 class ReqClient {
   static const bool proxyEnable = true;
@@ -111,6 +113,11 @@ class ReqClient {
   Future<Uint8List?> loadImage(
       String path, Map<String, dynamic>? params) async {
     try {
+      File file = await FileUtil.getCacheFile(CommonUtil.getTextIdent(path));
+      if (await file.exists()) {
+        return file.readAsBytes();
+      }
+
       var response = await dio!
           .get(path, options: Options(responseType: ResponseType.stream));
       final stream = await (response.data as ResponseBody).stream.toList();
@@ -118,7 +125,9 @@ class ReqClient {
       for (Uint8List subList in stream) {
         result.add(subList);
       }
-      return result.takeBytes();
+      var bytes = result.takeBytes();
+      file.writeAsBytesSync(bytes);
+      return bytes;
     } on DioException catch (_) {
       return null;
     }
