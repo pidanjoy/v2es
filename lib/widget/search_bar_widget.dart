@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:v2es/model/topic_model.dart';
 
 class MySearchBar extends StatefulWidget {
-  const MySearchBar({super.key, required this.isFixed, this.onSearch, this.topicHotList});
+  const MySearchBar(
+      {super.key, required this.isFixed, this.onSearch, this.topicHotList});
 
   final Function(String)? onSearch;
   final bool isFixed;
@@ -22,9 +23,9 @@ class _MySearchBarState extends State<MySearchBar> {
   @override
   void initState() {
     super.initState();
-    startTextAnimation();
     if (null != widget.topicHotList) {
       _textList = widget.topicHotList!;
+      startTextAnimation();
     }
   }
 
@@ -104,11 +105,12 @@ class _MySearchBarState extends State<MySearchBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  margin: const EdgeInsets.only(top: 5, bottom: 2),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    onPressed: () => Navigator.pop(context),
-                  )),
+                margin: const EdgeInsets.only(top: 5, bottom: 2),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
               Expanded(
                 child: Container(
                   height: 36,

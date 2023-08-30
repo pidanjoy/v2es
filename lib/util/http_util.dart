@@ -51,7 +51,6 @@ class HttpUtil {
   }
 
   static Future loadImage(String path, {Map<String, dynamic>? params}) async {
-    
     return await ReqClient().loadImage(path, params);
   }
 }

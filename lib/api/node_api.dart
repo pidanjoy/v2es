@@ -6,7 +6,6 @@ import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/node_model.dart';
 import 'package:v2es/model/topic_model.dart';
-import 'package:v2es/util/db_util.dart';
 import 'package:v2es/util/http_util.dart';
 
 import 'package:html/parser.dart' as html_parse;
@@ -27,7 +26,7 @@ class NodeApi {
       var tabName = tab.text;
       var tabHref = tab.attributes['href'];
       if (null != tabHref) {
-        tabList.add(NodeTab(tabName, tabHref));
+        tabList.add(NodeTab(name: tabName, href: tabHref));
       }
     }
 
@@ -79,10 +78,6 @@ class NodeApi {
       }
     }
 
-    for (var item in topicHeadList) {
-      DatabaseHelper.instance.insertTopic(item);
-    }
-
     List<TopicHead> topicHotList = [];
     var eleHotTopics =
         document.getElementById("TopicsHot")?.getElementsByTagName("table");
@@ -103,11 +98,7 @@ class NodeApi {
         }
       }
     }
-    return HomeData()
-      ..set(
-          tabList: tabList,
-          topicHeadList: topicHeadList,
-          topicHotList: topicHotList);
+    return HomeData(tabList, topicHeadList, topicHotList);
   }
 
   static Future<List<Node>> getAllList() async {

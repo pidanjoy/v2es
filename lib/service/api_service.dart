@@ -5,7 +5,7 @@ import 'package:v2es/model/cache_model.dart';
 class ApiService {
   static Future<void> initHomeData() async {
     try {
-      HomeData homeData = await NodeApi.getHomeData();
+      // HomeData homeData = await NodeApi.getHomeData();
     } catch (e) {
 
     }

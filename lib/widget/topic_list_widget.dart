@@ -1,8 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:v2es/api/node_api.dart';
+import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/topic_model.dart';
-import 'package:v2es/util/http_util.dart';
 import 'package:v2es/widget/image_load_widget.dart';
+import 'package:v2es/widget/keep_alive_wrapper.dart';
 
 import '../util/common_util.dart';
 
@@ -15,13 +17,11 @@ class TopicList extends StatefulWidget {
   State<TopicList> createState() => _TopicListState();
 }
 
-class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixin {
+class _TopicListState extends State<TopicList> {
   bool _isLoadingMore = true;
   bool _noMoreItems = true;
   List<TopicHead> _topicHeadList = [];
-
-  @override
-  bool get wantKeepAlive => true;
+  late HomeData homeDataProvider;
 
   @override
   void initState() {
@@ -31,9 +31,9 @@ class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    homeDataProvider = Provider.of<HomeData>(context);
     return RefreshIndicator(
-        onRefresh: _refreshArticles,
+        onRefresh: _refreshTopics,
         child: ListView.separated(
           itemCount: _isLoadingMore
               ? _topicHeadList.length + 1
@@ -50,100 +50,93 @@ class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixi
             if (_noMoreItems && index == _topicHeadList.length) {
               return _buildNoMoreItemsText();
             }
-            return ListTile(
-              leading:
-              ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Container(
-                  height: 32,
-                  width: 32,
-                  color: Colors.grey,
-                  child: ImageLoader(imageUrl: _topicHeadList[index].avatar ??
-                      "https://crates.io/assets/cargo.png",),
-                  // FutureBuilder(
-                  //   future: HttpUtil.loadImage(_topicHeadList[index].avatar ??
-                  //        "https://crates.io/assets/cargo.png"),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return const CircularProgressIndicator();
-                  //     } else if (snapshot.hasError) {
-                  //       return Text("Error: ${snapshot.error}");
-                  //     } else {
-                  //       return Image.memory(snapshot.data);
-                  //     }
-                  //   },
-                  // ),
+            return KeepAliveWrapper(
+              keepAlive: true,
+              child: ListTile(
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    height: 32,
+                    width: 32,
+                    color: Colors.grey,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(1),
+                      child: ImageLoader(
+                        imageUrl: _topicHeadList[index].avatar ??
+                            "https://crates.io/assets/cargo.png",
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              title: Row(
-                children: [
-                  const Icon(
-                    Icons.arrow_drop_up,
-                    color: Colors.green,
-                    size: 10,
-                  ),
-                  const Text(
-                    '1',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
+                title: Row(
+                  children: [
+                    const Icon(
+                      Icons.arrow_drop_up,
                       color: Colors.green,
+                      size: 10,
                     ),
-                  ),
-                  const SizedBox(width: 2),
-                  Flexible(
-                    child: Text(
-                      _topicHeadList[index].title,
-                      style: const TextStyle(fontSize: 12.5),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                    const Text(
+                      '1',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.green,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(30, 30, 30, 0.35),
-                      borderRadius: BorderRadius.circular(5),
+                    const SizedBox(width: 2),
+                    Flexible(
+                      child: Text(
+                        _topicHeadList[index].title,
+                        style: const TextStyle(fontSize: 12.5),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
                     ),
-                    child: Text(
-                      " • ${_topicHeadList[index].nodeTitle} ",
+                  ],
+                ),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(30, 30, 30, 0.35),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        " • ${_topicHeadList[index].nodeTitle} ",
+                        style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                    Container(
+                      width: 5,
+                    ),
+                    // Text(
+                    //   articles[index].lastReplyPerson,
+                    //   style: const TextStyle(fontSize: 10),
+                    // ),
+                    // Container(
+                    //   width: 5,
+                    // ),
+                    Text(
+                      CommonUtil.limitText(
+                          _topicHeadList[index].authorName ?? "", 10),
                       style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          fontSize: 10, fontWeight: FontWeight.w600),
                     ),
-                  ),
-                  Container(
-                    width: 5,
-                  ),
-                  // Text(
-                  //   articles[index].lastReplyPerson,
-                  //   style: const TextStyle(fontSize: 10),
-                  // ),
-                  // Container(
-                  //   width: 5,
-                  // ),
-                  Text(
-                    CommonUtil.limitText(
-                        _topicHeadList[index].authorName ?? "", 10),
-                    style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.w600),
-                  ),
-                  Container(
-                    width: 5,
-                  ),
-                  const Text(
-                    '50分钟前',
-                    style: TextStyle(fontSize: 10),
-                  ),
-                  Expanded(child: Container()),
-                  CircleAvatar(
+                    Container(
+                      width: 5,
+                    ),
+                    const Text(
+                      '50分钟前',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    Expanded(child: Container()),
+                    CircleAvatar(
                       radius: 8.5,
                       backgroundColor: Colors.grey,
                       child: Text(
@@ -152,26 +145,34 @@ class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixi
                           fontSize: 9,
                           color: Colors.white,
                         ),
-                      )),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  // Handle article tap
+                },
               ),
-              onTap: () {
-                // Handle article tap
-              },
             );
           },
         ));
   }
 
-  Future<void> _refreshArticles() async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> _refreshTopics() async {
+    HomeData data = await NodeApi.getHomeData();
+    await homeDataProvider.saveData(
+        tabList: data.tabList,
+        topicHeadList: data.topicHeadList,
+        topicHotList: data.topicHotList);
   }
 
   Widget _buildLoadingIndicator() {
-    return const Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Center(
-        child: CircularProgressIndicator(),
+    return Consumer<HomeData>(
+      builder: (context, HomeData homeDataProvider, child) => const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }
@@ -181,7 +182,7 @@ class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixi
       padding: EdgeInsets.all(16.0),
       child: Center(
         child: Text(
-          '没有更多内容',
+          '没有更多内容了',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 14.0,
@@ -197,9 +198,7 @@ class _TopicListState extends State<TopicList> with AutomaticKeepAliveClientMixi
         setState(() {
           _isLoadingMore = false;
           _noMoreItems = true;
-          _topicHeadList.add(TopicHead("终了1", "Author C"));
-          _topicHeadList.add(TopicHead("终了2", "Author C"));
-          _topicHeadList.add(TopicHead("终了3", "Author C"));
+          // _topicHeadList.add(TopicHead("下一页新主题...", "Author X"));
         });
       }
     });
