@@ -70,24 +70,12 @@ class _TopicListState extends State<TopicList> {
                 ),
                 title: Row(
                   children: [
-                    const Icon(
-                      Icons.arrow_drop_up,
-                      color: Colors.green,
-                      size: 10,
-                    ),
-                    const Text(
-                      '1',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.green,
-                      ),
-                    ),
-                    const SizedBox(width: 2),
                     Flexible(
                       child: Text(
                         _topicHeadList[index].title,
-                        style: const TextStyle(fontSize: 12.5),
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                        ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
@@ -98,6 +86,27 @@ class _TopicListState extends State<TopicList> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Row(
+                      children: null != _topicHeadList[index].rankUp &&
+                              _topicHeadList[index].rankUp != 0
+                          ? [
+                              const Icon(
+                                Icons.arrow_drop_up,
+                                color: Colors.green,
+                                size: 16,
+                              ),
+                              Text(
+                                _topicHeadList[index].rankUp.toString(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                            ]
+                          : [],
+                    ),
                     Container(
                       padding: const EdgeInsets.all(1),
                       decoration: BoxDecoration(
@@ -112,35 +121,36 @@ class _TopicListState extends State<TopicList> {
                             color: Colors.white),
                       ),
                     ),
-                    Container(
-                      width: 5,
+                    const SizedBox(
+                      width: 10,
                     ),
-                    // Text(
-                    //   articles[index].lastReplyPerson,
-                    //   style: const TextStyle(fontSize: 10),
-                    // ),
-                    // Container(
-                    //   width: 5,
-                    // ),
                     Text(
                       CommonUtil.limitText(
-                          _topicHeadList[index].authorName ?? "", 10),
+                          _topicHeadList[index].authorName ?? "", 15),
                       style: const TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.w600),
+                          fontSize: 12,
+                          color: Color.fromRGBO(77, 77, 77, 1.0),
+                          fontWeight: FontWeight.w500),
                     ),
                     Container(
                       width: 5,
                     ),
-                    const Text(
-                      '50分钟前',
-                      style: TextStyle(fontSize: 10),
-                    ),
                     Expanded(child: Container()),
+                    Text(
+                      null != _topicHeadList[index].lastReplyTime
+                          ? CommonUtil.formatTimeDifference(
+                              _topicHeadList[index].lastReplyTime!)
+                          : "刚刚",
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     CircleAvatar(
                       radius: 8.5,
                       backgroundColor: Colors.grey,
                       child: Text(
-                        _topicHeadList[index].replyQty?.toString() ?? "-",
+                        _topicHeadList[index].replyQty.toString() ?? "-",
                         style: const TextStyle(
                           fontSize: 9,
                           color: Colors.white,

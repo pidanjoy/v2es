@@ -47,7 +47,7 @@ class NodeApi {
           var nodeHref = eleTopicNodeInfo?.attributes['href'];
           var nodeTitle = eleTopicNodeInfo?.text;
           var eleStrongTags = eleTopicInfo?.querySelectorAll("strong");
-          String? authorHref, authorName, lastReplyHref, lastReplyName;
+          String? authorHref, authorName, lastReplyHref, lastReplyName, rankUp;
           if (null != eleStrongTags) {
             authorHref = eleStrongTags[0].firstChild?.attributes['href'];
             authorName = eleStrongTags[0].firstChild?.text;
@@ -56,12 +56,20 @@ class NodeApi {
               lastReplyName = eleStrongTags[1].firstChild?.text;
             }
           }
+          rankUp =
+              eleTopicInfo?.querySelector("div[class='votes']")?.text.trim();
+          if (null == rankUp || rankUp.isEmpty) {
+            rankUp = "0";
+          }
+          debugPrint("xxx =-> $rankUp");
           DateTime? lastReplyTime;
           var replyTime =
               eleTopicInfo?.getElementsByTagName("span")[0].attributes['title'];
           if (null != replyTime) {
             lastReplyTime = DateTime.tryParse(replyTime);
           }
+          String replyQty =
+              eleTds[3].querySelector("a[class='count_livid']")?.text ?? "0";
 
           if (null != href) {
             topicHeadList.add(TopicHead(title, href,
@@ -70,6 +78,8 @@ class NodeApi {
                 avatar: avatar,
                 nodeHref: nodeHref,
                 nodeTitle: nodeTitle,
+                rankUp: int.parse(rankUp),
+                replyQty: int.parse(replyQty),
                 lastReplyHref: lastReplyHref,
                 lastReplyTime: lastReplyTime,
                 lastReplyName: lastReplyName));
