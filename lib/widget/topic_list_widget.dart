@@ -160,7 +160,8 @@ class _TopicListState extends State<TopicList> {
                   ],
                 ),
                 onTap: () {
-                  // Handle article tap
+                  Navigator.pushNamed(context, '/topic',
+                      arguments: _topicHeadList[index].href);
                 },
               ),
             );
@@ -189,13 +190,13 @@ class _TopicListState extends State<TopicList> {
 
   Widget _buildNoMoreItemsText() {
     return const Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 30),
       child: Center(
         child: Text(
           '没有更多内容了',
           style: TextStyle(
             color: Colors.grey,
-            fontSize: 14.0,
+            fontSize: 12.0,
           ),
         ),
       ),
