@@ -31,6 +31,6 @@ class TopicApi {
     for (var reply in eleReplys) {
       debugPrint(reply.querySelector(".reply_content")?.outerHtml);
     }
-    return Topic();
+    return Topic(title: '', href: '', context: '', authorName: '', authorHref: '', avatar: '', pageNo: 0, pageSize: 0);
   }
 }
