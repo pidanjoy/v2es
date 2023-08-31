@@ -11,25 +11,21 @@ class ImageLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 150,
-      height: height ?? 50,
-      child: Container(
-        height: 32,
-        width: 32,
-        color: Colors.grey,
-        child: FutureBuilder(
-          future: HttpUtil.loadImage(imageUrl),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            } else {
-              return Image.memory(snapshot.data);
-            }
-          },
-        ),
+    return Container(
+      width: width ?? 32.0,
+      // height: height ?? Size.zero.height,
+      color: Colors.grey,
+      child: FutureBuilder(
+        future: HttpUtil.loadImage(imageUrl),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text("Error: ${snapshot.error}");
+          } else {
+            return Image.memory(snapshot.data);
+          }
+        },
       ),
     );
   }

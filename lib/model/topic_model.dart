@@ -2,7 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'g/topic_model.g.dart';
 
-class Topic {}
+@JsonSerializable()
+class Topic {
+
+}
 
 @JsonSerializable()
 class TopicHead {
