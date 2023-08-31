@@ -111,26 +111,24 @@ class ReqClient {
   }
 
   Future<Uint8List?> loadImage(
-      String path, Map<String, dynamic>? params) async {
-    try {
-      File file = await FileUtil.getCacheFile(CommonUtil.getTextIdent(path));
-      if (await file.exists()) {
-        return file.readAsBytes();
-      }
-
-      var response = await dio!
-          .get(path, options: Options(responseType: ResponseType.stream));
-      final stream = await (response.data as ResponseBody).stream.toList();
-      final result = BytesBuilder();
-      for (Uint8List subList in stream) {
-        result.add(subList);
-      }
-      var bytes = result.takeBytes();
-      file.writeAsBytesSync(bytes);
-      return bytes;
-    } on DioException catch (_) {
-      return null;
+    String path, Map<String, dynamic>? params) async {
+    File file = await FileUtil.getCacheFile(CommonUtil.getTextIdent(path));
+    if (await file.exists()) {
+      return file.readAsBytes();
     }
+
+    var response = await dio!.get(path,
+        options: Options(
+          responseType: ResponseType.stream,
+        ));
+    final stream = await (response.data as ResponseBody).stream.toList();
+    final result = BytesBuilder();
+    for (Uint8List subList in stream) {
+      result.add(subList);
+    }
+    var bytes = result.takeBytes();
+    file.writeAsBytesSync(bytes);
+    return bytes;
   }
 }
 
@@ -170,6 +168,8 @@ class AppException implements Exception {
         try {
           int errCode = error.response?.statusCode ?? -1;
           switch (errCode) {
+            case 302:
+              return UnauthorisedException(errCode, "请求被重定向");
             case 401:
               return UnauthorisedException(errCode, "没有访问权限");
             case 500:

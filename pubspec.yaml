@@ -16,6 +16,9 @@ dependencies:
   provider: ^6.0.5
   shared_preferences: ^2.2.0
   json_annotation: ^4.8.1
+  flutter_widget_from_html_core: ^0.10.4
+  url_launcher: ^6.1.13
+  flutter_styled_toast: ^2.2.1
 
   cupertino_icons: ^1.0.2
 

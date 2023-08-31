@@ -20,6 +20,7 @@ class TopicApi {
     debugPrint("------------------Content------------------");
     var eleContent = document.querySelector(".topic_content");
     debugPrint(eleContent?.outerHtml);
+
     debugPrint("------------------Tag------------------");
     var eleTags = document.querySelectorAll('a[href^="/tag/"]');
     for (var tag in eleTags) {

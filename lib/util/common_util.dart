@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class CommonUtil {
   static String limitText(String text, int maxLength) {
     if (text.length <= maxLength) {
@@ -28,5 +30,13 @@ class CommonUtil {
     } else {
       return "${(difference.inDays / 365).floor()}年前";
     }
+  }
+
+  static double getScreenWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+  }
+
+  static double getScreenHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
   }
 }
