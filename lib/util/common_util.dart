@@ -20,15 +20,15 @@ class CommonUtil {
     if (difference < const Duration(minutes: 1)) {
       return "刚刚";
     } else if (difference < const Duration(hours: 1)) {
-      return "${difference.inMinutes}分钟前";
+      return "${difference.inMinutes}分钟";
     } else if (difference < const Duration(days: 1)) {
-      return "${difference.inHours}小时前";
+      return "${difference.inHours}小时";
     } else if (difference < const Duration(days: 30)) {
-      return "${difference.inDays}天前";
+      return "${difference.inDays}天";
     } else if (difference < const Duration(days: 365)) {
-      return "${(difference.inDays / 30).floor()}个月前";
+      return "${(difference.inDays / 30).floor()}个月";
     } else {
-      return "${(difference.inDays / 365).floor()}年前";
+      return "${(difference.inDays / 365).floor()}年";
     }
   }
 
