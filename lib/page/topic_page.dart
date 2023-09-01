@@ -87,29 +87,12 @@ class _TopicPageState extends State<TopicPage> {
             } else {
               List<Widget> titleArea = [];
               // 0.author
-              titleArea.add(Container(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ImageLoader(
-                        imageUrl: snapshot.data!.avatar,
-                        width: 25.0,
-                        circular: 20.0,
-                      ),
-                      const SizedBox(width: 5.0),
-                      GestureDetector(
-                        child: Text(snapshot.data!.authorName),
-                        onTap: () => {
-                          debugPrint(snapshot.data!.authorHref),
-                        },
-                      ),
-                      Text(
-                        " • ${CommonUtil.formatTimeDifference(snapshot.data!.releaseTime!)}",
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  )));
+              titleArea.add(Someone(
+                avatar: snapshot.data!.avatar,
+                authorName: snapshot.data!.authorName,
+                authorHref: snapshot.data!.authorHref,
+                releaseTime: snapshot.data!.releaseTime!,
+              ));
               // 1.Title
               titleArea.add(Text(
                 snapshot.data!.title,
@@ -128,42 +111,172 @@ class _TopicPageState extends State<TopicPage> {
               titleArea.add(HtmlToWidget(htmlContext: snapshot.data!.context));
               // 4.postscript
               if (null != snapshot.data!.postscript) {
+                titleArea.add(const Divider());
                 titleArea
                     .add(HtmlToWidget(htmlContext: snapshot.data!.postscript!));
               }
 
-              return Container(
-                padding: const EdgeInsets.all(5),
-                child: ListView(
-                  children: [
-                    // title
-                    Column(
+              return ListView(
+                children: [
+                  // title
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: titleArea,
                     ),
-                    // reply
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: snapshot.data!.replies!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Column(
-                          children: [
-                            HtmlToWidget(
-                              htmlContext:
-                                  snapshot.data!.replies![index].context,
+                  ),
+                  Container(
+                    color: const Color.fromRGBO(225, 225, 225, 1.0),
+                    height: 10,
+                  ),
+                  // reply
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: snapshot.data!.replies!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                              children: [
+                                Someone(
+                                  avatar: snapshot.data!.replies![index].avatar,
+                                  authorName:
+                                      snapshot.data!.replies![index].replyName,
+                                  authorHref:
+                                      snapshot.data!.replies![index].replyHref,
+                                  releaseTime:
+                                      snapshot.data!.replies![index].replyTime!,
+                                  otherWidget: Row(
+                                    children: [
+                                      GestureDetector(
+                                        child: const Icon(
+                                          Icons.thumb_up_alt_rounded,
+                                          color: Colors.grey,
+                                          size: 14,
+                                        ),
+                                        onTap: () => {},
+                                      ),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        snapshot.data!.replies![index]
+                                                    .thanksCount! !=
+                                                0
+                                            ? "${snapshot.data!.replies![index].thanksCount!}"
+                                            : "",
+                                        style: const TextStyle(
+                                            color: Colors.grey, fontSize: 12.0),
+                                      ),
+                                      const SizedBox(width: 15),
+                                      GestureDetector(
+                                        child: const Icon(
+                                          Icons.reply,
+                                          color: Colors.grey,
+                                          size: 16,
+                                        ),
+                                        onTap: () => {},
+                                      ),
+                                      const SizedBox(width: 15),
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(0),
+                                          color: const Color.fromRGBO(
+                                              160, 160, 160, 1.0),
+                                          width: 15,
+                                          height: 15,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "${snapshot.data!.replies![index].level!}",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 8.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                HtmlToWidget(
+                                  htmlContext:
+                                      snapshot.data!.replies![index].context,
+                                ),
+                              ],
                             ),
-                            const Divider(),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                          ),
+                          Container(
+                            color: const Color.fromRGBO(225, 225, 225, 1.0),
+                            height: 5,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               );
             }
           },
         ),
+      ),
+    );
+  }
+}
+
+class Someone extends StatelessWidget {
+  final String avatar;
+  final String authorName;
+  final String authorHref;
+  final DateTime releaseTime;
+
+  final Widget? otherWidget;
+
+  const Someone(
+      {super.key,
+      required this.avatar,
+      required this.authorName,
+      required this.authorHref,
+      required this.releaseTime,
+      this.otherWidget});
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> list = [
+      Row(
+        children: [
+          ImageLoader(
+            imageUrl: avatar,
+            width: 25.0,
+            circular: 20.0,
+          ),
+          const SizedBox(width: 5.0),
+          GestureDetector(
+            child: Text(authorName),
+            onTap: () => {
+              debugPrint(authorHref),
+            },
+          ),
+          Text(
+            " • ${CommonUtil.formatTimeDifference(releaseTime)}",
+            style: const TextStyle(color: Colors.grey, fontSize: 12.0),
+          ),
+        ],
+      )
+    ];
+    if (null != otherWidget) {
+      list.add(otherWidget!);
+    }
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: list,
       ),
     );
   }
