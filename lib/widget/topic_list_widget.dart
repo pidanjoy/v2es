@@ -5,6 +5,7 @@ import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/widget/image_load_widget.dart';
 import 'package:v2es/widget/keep_alive_wrapper.dart';
+import 'package:v2es/widget/text_tag_widget.dart';
 
 import '../util/common_util.dart';
 
@@ -107,20 +108,7 @@ class _TopicListState extends State<TopicList> {
                             ]
                           : [],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(30, 30, 30, 0.35),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        " • ${_topicHeadList[index].nodeTitle} ",
-                        style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ),
+                    TextTag(text: _topicHeadList[index].nodeTitle!),
                     const SizedBox(
                       width: 10,
                     ),
