@@ -45,6 +45,7 @@ class _HtmlToWidgetState extends State<HtmlToWidget> {
             return ImageLoader(
               imageUrl: imgSrc,
               width: CommonUtil.getScreenWidth(context),
+              enableEnlarge: true,
             );
           }
         }

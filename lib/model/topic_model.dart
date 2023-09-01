@@ -10,6 +10,7 @@ class Topic {
   String authorName;
   String authorHref;
   String avatar;
+  String? postscript;
   DateTime? releaseTime;
   String? nodeTitle;
   String? nodeHref;
@@ -20,6 +21,7 @@ class Topic {
   int? replyCount;
   DateTime? lastReplyTime;
   List<TopicTag>? tags;
+  List<TopicReply>? replies;
   int pageNo;
   int pageSize;
 
@@ -30,6 +32,7 @@ class Topic {
       required this.authorName,
       required this.authorHref,
       required this.avatar,
+      this.postscript,
       this.releaseTime,
       this.nodeTitle,
       this.nodeHref,
@@ -40,6 +43,7 @@ class Topic {
       this.replyCount,
       this.lastReplyTime,
       this.tags,
+      this.replies,
       required this.pageNo,
       required this.pageSize});
 

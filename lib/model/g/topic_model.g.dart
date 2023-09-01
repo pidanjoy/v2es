@@ -23,9 +23,6 @@ Topic _$TopicFromJson(Map<String, dynamic> json) => Topic(
       favoriteCount: json['favoriteCount'] as int?,
       thanksCount: json['thanksCount'] as int?,
       replyCount: json['replyCount'] as int?,
-      lastReplyTime: json['lastReplyTime'] == null
-          ? null
-          : DateTime.parse(json['lastReplyTime'] as String),
       tags: (json['tags'] as List<dynamic>?)
           ?.map((e) => TopicTag.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -48,7 +45,6 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
       'favoriteCount': instance.favoriteCount,
       'thanksCount': instance.thanksCount,
       'replyCount': instance.replyCount,
-      'lastReplyTime': instance.lastReplyTime?.toIso8601String(),
       'tags': instance.tags,
       'pageNo': instance.pageNo,
       'pageSize': instance.pageSize,
