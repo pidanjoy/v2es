@@ -27,7 +27,7 @@ class ImageLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget result = Container(
       width: width ?? 32.0,
-      // height: height ?? Size.zero.height,
+      height: height ?? 32.0,
       padding: padding ?? EdgeInsets.zero,
       margin: margin ?? EdgeInsets.zero,
       color: Colors.grey,
