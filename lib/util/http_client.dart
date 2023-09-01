@@ -8,8 +8,8 @@ import 'package:v2es/util/file_util.dart';
 
 class ReqClient {
   static const bool proxyEnable = true;
-  static const proxyHost = '192.168.2.175';
-  static const proxyPort = 7890;
+  static const proxyHost = '192.168.3.141';
+  static const proxyPort = 1082;
 
   static const int _connectTimeout = 30000;
   static const int _receiveTimeout = 30000;
