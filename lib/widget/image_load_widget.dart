@@ -12,6 +12,8 @@ class ImageLoader extends StatelessWidget {
 
   final bool? enableEnlarge;
 
+  final GestureTapCallback? onTap;
+
   const ImageLoader({
     super.key,
     required this.imageUrl,
@@ -21,11 +23,12 @@ class ImageLoader extends StatelessWidget {
     this.circular,
     this.padding,
     this.margin,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    Widget result = Container(
+    Widget w1 = Container(
       width: width ?? 32.0,
       height: height ?? 32.0,
       padding: padding ?? EdgeInsets.zero,
@@ -59,13 +62,25 @@ class ImageLoader extends StatelessWidget {
         },
       ),
     );
+    Widget w2;
     if (null != circular) {
-      return ClipRRect(
+      w2 = ClipRRect(
         borderRadius: BorderRadius.circular(circular!),
-        child: result,
+        child: w1,
       );
+    } else {
+      w2 = w1;
     }
-    return result;
+    Widget w3;
+    if (null != onTap) {
+      w3 = GestureDetector(
+        onTap: onTap,
+        child: w2,
+      );
+    } else {
+      w3 = w2;
+    }
+    return w3;
   }
 }
 

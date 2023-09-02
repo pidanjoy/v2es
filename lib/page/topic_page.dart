@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/link.dart';
 import 'package:v2es/api/topic_api.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/html_to_widget.dart';
 import 'package:v2es/widget/image_load_widget.dart';
+import 'package:v2es/widget/my_app_bar_widget.dart';
 import 'package:v2es/widget/text_tag_widget.dart';
 import 'package:v2es/widget/topic_loading_widget.dart';
 
@@ -30,51 +30,34 @@ class _TopicPageState extends State<TopicPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(CommonUtil.getScreenHeight(context) * 0.06),
-        child: AppBar(
-          backgroundColor: const Color.fromRGBO(35, 29, 40, 1.0),
-          automaticallyImplyLeading: false,
-          leading: IconButton(
+      appBar: MyAppBar(
+        size: CommonUtil.getScreenHeight(context) * 0.06,
+        actions: [
+          IconButton(
             icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
+              Icons.search_rounded,
               size: 18,
             ),
             color: Colors.white,
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
-            'V2EX',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+          IconButton(
+            icon: const Icon(
+              Icons.ac_unit_rounded,
+              size: 18,
+            ),
+            color: Colors.white,
+            onPressed: () => Navigator.pop(context),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.search_rounded,
-                size: 18,
-              ),
-              color: Colors.white,
-              onPressed: () => Navigator.pop(context),
+          IconButton(
+            icon: const Icon(
+              Icons.add_rounded,
+              size: 22,
             ),
-            IconButton(
-              icon: const Icon(
-                Icons.ac_unit_rounded,
-                size: 18,
-              ),
-              color: Colors.white,
-              onPressed: () => Navigator.pop(context),
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.add_rounded,
-                size: 22,
-              ),
-              color: Colors.white,
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
+            color: Colors.white,
+            onPressed: () => Navigator.pop(context),
+          ),
+        ]
       ),
       body: SafeArea(
         child: FutureBuilder(
