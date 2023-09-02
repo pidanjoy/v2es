@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/home_page.dart';
+import 'package:v2es/page/login_page.dart';
 import 'package:v2es/page/search_page.dart';
 import 'package:v2es/page/topic_page.dart';
 import 'package:v2es/page/unknown_page.dart';
@@ -43,6 +44,11 @@ class MyApp extends StatelessWidget {
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
                   const SearchPage(),
+            );
+          case "/login":
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+              const LoginPage(),
             );
           case "/topic":
             return PageRouteBuilder(
