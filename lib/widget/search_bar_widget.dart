@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:v2es/model/topic_model.dart';
+import 'package:v2es/util/common_util.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar(
@@ -17,6 +18,11 @@ class _MySearchBarState extends State<MySearchBar> {
   List<TopicHead> _textList = [];
   int currentIndex = 0;
   double opacity = 1.0;
+
+  static final googleIcon = Image.asset("assets/images/google_icon_1x.png");
+  static final v2exIcon = Image.asset("assets/images/icon-196.png");
+  int _searchType = 0;
+  Image _searchIcon = googleIcon;
 
   final TextEditingController _controller = TextEditingController();
 
@@ -49,6 +55,18 @@ class _MySearchBarState extends State<MySearchBar> {
     });
   }
 
+  void switchSearchType() {
+    setState(() {
+      if (_searchType == 0) {
+        _searchType = 1;
+        _searchIcon = v2exIcon;
+      } else {
+        _searchType = 0;
+        _searchIcon = googleIcon;
+      }
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -59,44 +77,76 @@ class _MySearchBarState extends State<MySearchBar> {
     return widget.isFixed
         ? Row(
             children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 30,
-                  color: const Color.fromARGB(60, 30, 30, 30),
-                  child: const Center(child: Text('节点')),
-                ),
+              Container(
+                height: 30,
+                padding: const EdgeInsets.all(2),
+                width: CommonUtil.getScreenWidth(context) * 0.12,
+                child: const Center(child: Text('节点')),
               ),
               Expanded(
-                flex: 4,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/search');
-                  },
+                child: Container(
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  margin: const EdgeInsets.only(right: 5, top: 5, bottom: 2),
                   child: Container(
-                    alignment: Alignment.center,
-                    height: 30,
-                    color: const Color.fromARGB(30, 30, 30, 30),
-                    child: AnimatedOpacity(
-                      opacity: opacity,
-                      duration: const Duration(seconds: 2),
-                      child: Text(
-                        _textList[currentIndex].title,
-                        style:
-                            const TextStyle(fontSize: 12.5, color: Colors.grey),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
+                    margin: const EdgeInsets.only(left: 10),
+                    decoration: const BoxDecoration(),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/search');
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 30,
+                              child: AnimatedOpacity(
+                                opacity: opacity,
+                                duration: const Duration(seconds: 2),
+                                child: Text(
+                                  _textList[currentIndex].title,
+                                  style: const TextStyle(fontSize: 12),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 1.0),
+                          decoration: const BoxDecoration(
+                            color: Colors.deepOrangeAccent,
+                            borderRadius: BorderRadius.horizontal(
+                                left: Radius.circular(20),
+                                right: Radius.circular(20)),
+                          ),
+                          child: TextButton(
+                            onPressed: () => Navigator.pushNamed(
+                                context, '/topic',
+                                arguments: _textList[currentIndex].href),
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                            ),
+                            child: const Text(
+                              '搜索',
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 30,
-                  color: const Color.fromARGB(60, 30, 30, 30),
-                  child: const Center(child: Text('搜索')),
                 ),
               ),
             ],
@@ -125,16 +175,26 @@ class _MySearchBarState extends State<MySearchBar> {
                     decoration: const BoxDecoration(),
                     child: Row(
                       children: [
+                        GestureDetector(
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            alignment: Alignment.center,
+                            child: _searchIcon,
+                          ),
+                          onTap: () => switchSearchType(),
+                        ),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: TextField(
                             decoration: const InputDecoration(
-                              hintText: "Google site:v2ex.com/t",
+                              hintText: " 请输入搜索内容",
                               border: InputBorder.none,
                               hintStyle: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   textBaseline: TextBaseline.alphabetic),
                             ),
-                            cursorHeight: 22,
+                            cursorHeight: 25,
                             style: const TextStyle(
                                 textBaseline: TextBaseline.ideographic),
                             controller: _controller,
@@ -143,20 +203,27 @@ class _MySearchBarState extends State<MySearchBar> {
                         Container(
                           margin: const EdgeInsets.only(left: 1.0),
                           decoration: const BoxDecoration(
-                            color: Colors.orange,
+                            color: Colors.deepOrangeAccent,
                             borderRadius: BorderRadius.horizontal(
                                 left: Radius.circular(20),
                                 right: Radius.circular(20)),
                           ),
                           child: TextButton(
-                            child: const Text(
-                              '搜索',
-                              style: TextStyle(
-                                  fontSize: 11, fontWeight: FontWeight.w800),
-                            ),
                             onPressed: () => null != widget.onSearch
                                 ? widget.onSearch!(_controller.text)
                                 : () {},
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                            ),
+                            child: const Text(
+                              '搜索',
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                       ],
