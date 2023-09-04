@@ -235,6 +235,7 @@ class Someone extends StatelessWidget {
           ImageLoader(
             imageUrl: avatar,
             width: 25.0,
+            height: 25.0,
             circular: 20.0,
           ),
           const SizedBox(width: 5.0),
