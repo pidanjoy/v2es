@@ -81,7 +81,7 @@ class _MySearchBarState extends State<MySearchBar> {
                 height: 30,
                 padding: const EdgeInsets.all(2),
                 width: CommonUtil.getScreenWidth(context) * 0.12,
-                child: const Center(child: Text('节点')),
+                child: Image.asset("assets/images/v2ex_network.png"),
               ),
               Expanded(
                 child: Container(

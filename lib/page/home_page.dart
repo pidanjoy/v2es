@@ -6,6 +6,7 @@ import 'package:v2es/page/notebook_page.dart';
 import 'package:v2es/page/timeline_page.dart';
 import 'package:v2es/page/write_page.dart';
 import 'package:v2es/widget/search_bar_widget.dart';
+import 'package:v2es/widget/tab_bar_widget.dart';
 import 'package:v2es/widget/topic_list_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -60,6 +61,19 @@ class _HomePageState extends State<HomePage> {
                 MySearchBar(
                   isFixed: true,
                   topicHotList: homeDataProvider.topicHotList,
+                ),
+                MyTabBar(
+                  tabList: homeDataProvider.tabList,
+                  tabNodes: [
+                    "程序员",
+                    "Python",
+                    "iDev",
+                    "Android",
+                    "Linux",
+                    "node.js",
+                    "云计算",
+                    "宽带症候群"
+                  ],
                 ),
                 Expanded(
                   child:
