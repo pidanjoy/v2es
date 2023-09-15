@@ -30,14 +30,20 @@ Map<String, dynamic> _$NodeToJson(Node instance) => <String, dynamic>{
 
 Plan _$PlanFromJson(Map<String, dynamic> json) => Plan(
       json['name'] as String,
+      json['subName'] as String,
       (json['nodes'] as List<dynamic>)
           .map((e) => Node.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['qty'] as int,
+      json['icon'] as String,
+      json['color'] as String,
     );
 
 Map<String, dynamic> _$PlanToJson(Plan instance) => <String, dynamic>{
       'name': instance.name,
+      'subName': instance.subName,
       'nodes': instance.nodes,
       'qty': instance.qty,
+      'icon': instance.icon,
+      'color': instance.color,
     };

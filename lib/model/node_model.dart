@@ -32,10 +32,13 @@ class Node {
 @JsonSerializable()
 class Plan {
   String name;
+  String subName;
   List<Node> nodes;
   int qty;
+  String icon;
+  String color;
 
-  Plan(this.name, this.nodes, this.qty);
+  Plan(this.name, this.subName, this.nodes, this.qty, this.icon, this.color);
 
   factory Plan.fromJson(Map<String, dynamic> json) =>
       _$PlanFromJson(json);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/image_load_widget.dart';
 
@@ -26,7 +27,7 @@ class _MyPageState extends State<MyPage> {
             width: 80,
             height: 80,
             circular: 40,
-            onTap: () => Navigator.pushNamed(context, "/login"),
+            onTap: () => CommonUtil.routeTo(context, RouteName.login),
           ),
           Text(
             "Test nickname",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/util/common_util.dart';
 
@@ -14,7 +15,8 @@ class MySearchBar extends StatefulWidget {
   State<MySearchBar> createState() => _MySearchBarState();
 }
 
-class _MySearchBarState extends State<MySearchBar> {
+class _MySearchBarState extends State<MySearchBar>
+    with SingleTickerProviderStateMixin {
   List<TopicHead> _textList = [];
   int currentIndex = 0;
   double opacity = 1.0;
@@ -24,7 +26,10 @@ class _MySearchBarState extends State<MySearchBar> {
   int _searchType = 0;
   Image _searchIcon = googleIcon;
 
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _editController = TextEditingController();
+  late final AnimationController _planController =
+      AnimationController(duration: const Duration(seconds: 720), vsync: this)
+        ..repeat();
 
   @override
   void initState() {
@@ -77,11 +82,18 @@ class _MySearchBarState extends State<MySearchBar> {
     return widget.isFixed
         ? Row(
             children: [
-              Container(
-                height: 30,
-                padding: const EdgeInsets.all(2),
-                width: CommonUtil.getScreenWidth(context) * 0.12,
-                child: Image.asset("assets/images/v2ex_network.png"),
+              RotationTransition(
+                alignment: Alignment.center,
+                turns: Tween(begin: 0.0, end: 360.0).animate(_planController),
+                child: Container(
+                  height: 30,
+                  padding: const EdgeInsets.all(2),
+                  width: CommonUtil.getScreenWidth(context) * 0.12,
+                  child: GestureDetector(
+                    child: Image.asset("assets/images/v2ex_network.png"),
+                    onTap: () => CommonUtil.routeTo(context, RouteName.plan),
+                  ),
+                ),
               ),
               Expanded(
                 child: Container(
@@ -99,9 +111,8 @@ class _MySearchBarState extends State<MySearchBar> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/search');
-                            },
+                            onTap: () =>
+                                CommonUtil.routeTo(context, RouteName.search),
                             child: Container(
                               alignment: Alignment.center,
                               height: 30,
@@ -197,7 +208,7 @@ class _MySearchBarState extends State<MySearchBar> {
                             cursorHeight: 25,
                             style: const TextStyle(
                                 textBaseline: TextBaseline.ideographic),
-                            controller: _controller,
+                            controller: _editController,
                           ),
                         ),
                         Container(
@@ -210,7 +221,7 @@ class _MySearchBarState extends State<MySearchBar> {
                           ),
                           child: TextButton(
                             onPressed: () => null != widget.onSearch
-                                ? widget.onSearch!(_controller.text)
+                                ? widget.onSearch!(_editController.text)
                                 : () {},
                             style: ButtonStyle(
                               padding:

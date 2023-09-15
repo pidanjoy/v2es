@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
+import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/widget/image_load_widget.dart';
@@ -150,10 +151,8 @@ class _TopicListState extends State<TopicList> {
                   ),
                 ],
               ),
-              onTap: () {
-                Navigator.pushNamed(context, '/topic',
-                    arguments: _topicHeadList[index].href);
-              },
+              onTap: () => CommonUtil.routeTo(context, RouteName.topic,
+                  arguments: _topicHeadList[index].href),
             ),
           );
         },
