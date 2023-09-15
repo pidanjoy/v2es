@@ -37,6 +37,7 @@ Plan _$PlanFromJson(Map<String, dynamic> json) => Plan(
       json['qty'] as int,
       json['icon'] as String,
       json['color'] as String,
+      json['backgroundColor'] as String,
     );
 
 Map<String, dynamic> _$PlanToJson(Plan instance) => <String, dynamic>{
@@ -46,4 +47,5 @@ Map<String, dynamic> _$PlanToJson(Plan instance) => <String, dynamic>{
       'qty': instance.qty,
       'icon': instance.icon,
       'color': instance.color,
+      'backgroundColor': instance.backgroundColor,
     };

@@ -23,8 +23,7 @@ class Node {
 
   Node({required this.title, required this.name, required this.topics});
 
-  factory Node.fromJson(Map<String, dynamic> json) =>
-      _$NodeFromJson(json);
+  factory Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
 
   Map<String, dynamic> toJson() => _$NodeToJson(this);
 }
@@ -37,11 +36,14 @@ class Plan {
   int qty;
   String icon;
   String color;
+  String backgroundColor;
 
-  Plan(this.name, this.subName, this.nodes, this.qty, this.icon, this.color);
+  bool isExpand = false;
 
-  factory Plan.fromJson(Map<String, dynamic> json) =>
-      _$PlanFromJson(json);
+  Plan(this.name, this.subName, this.nodes, this.qty, this.icon, this.color,
+      this.backgroundColor);
+
+  factory Plan.fromJson(Map<String, dynamic> json) => _$PlanFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlanToJson(this);
 }

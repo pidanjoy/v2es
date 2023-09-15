@@ -17,7 +17,7 @@ RouteFactory myGenerateRoute = (setting) {
       pageBuilder: (context, animation, secondaryAnimation) =>
           const SearchPage(),
     );
-  } else if (setting.name == RouteName.search.r) {
+  } else if (setting.name == RouteName.login.r) {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) =>
           const LoginPage(),

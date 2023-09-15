@@ -30,52 +30,54 @@ class _MyTabBarState extends State<MyTabBar> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
-                  !_isExpand ? widget.tabList.length : widget.tabNodes.length,
+              !_isExpand ? widget.tabList.length : widget.tabNodes.length,
               itemBuilder: (BuildContext context, int index) {
-                return !_isExpand
-                    ? Container(
-                        margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                        width: 60,
-                        child: TextButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(1.0)),
-                          ),
-                          child: Text(
-                            widget.tabList[index].name,
-                            style: index != 0
-                                ? const TextStyle(
-                                    fontSize: 14,
-                                  )
-                                : const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    // decoration: TextDecoration.underline,
-                                    // decorationStyle: TextDecorationStyle.solid,
-                                    // decorationColor: Colors.grey,
-                                    // decorationThickness: 3.0,
-                                  ),
-                          ),
+                return
+                  // !_isExpand
+                  //   ?
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                    width: 60,
+                    child: TextButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.all(1.0)),
+                      ),
+                      child: Text(
+                        widget.tabList[index].name,
+                        style: index != 0
+                            ? const TextStyle(
+                          fontSize: 14,
+                        )
+                            : const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          // decoration: TextDecoration.underline,
+                          // decorationStyle: TextDecorationStyle.solid,
+                          // decorationColor: Colors.grey,
+                          // decorationThickness: 3.0,
                         ),
-                      )
-                    : Container(
-                        margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                        child: TextButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(1.0)),
-                          ),
-                          child: Text(
-                            widget.tabNodes[index],
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey),
-                          ),
-                        ),
-                      );
+                      ),
+                    ),
+                  );
+                // : Container(
+                //     margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                //     child: TextButton(
+                //       onPressed: () {},
+                //       style: ButtonStyle(
+                //         padding: MaterialStateProperty.all(
+                //             const EdgeInsets.all(1.0)),
+                //       ),
+                //       child: Text(
+                //         widget.tabNodes[index],
+                //         style: const TextStyle(
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.normal,
+                //             color: Colors.grey),
+                //       ),
+                //     ),
+                //   );
               },
             ),
           ),
