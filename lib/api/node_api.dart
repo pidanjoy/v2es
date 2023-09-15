@@ -2,10 +2,13 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/node_model.dart';
 import 'package:v2es/model/topic_model.dart';
+import 'package:v2es/util/common_util.dart';
 import 'package:v2es/util/http_util.dart';
 
 import 'package:html/parser.dart' as html_parse;
@@ -139,7 +142,8 @@ class NodeApi {
           var eleHeaders = elePlan.getElementsByClassName("header");
           var planInfo =
               eleHeaders[0].text.replaceAll("nodes", "").trim().split("•");
-          var planName = planInfo[0];
+          String planName = CommonUtil.extractChinese(planInfo[0]);
+          var subName = planInfo[0].replaceAll(planName, "");
           var qty = int.parse(planInfo[1]);
 
           if (eleHeaders.isNotEmpty) {
@@ -152,7 +156,18 @@ class NodeApi {
                 nodeList.add(Node(title: nodeTitle, name: nodeName, topics: 0));
               }
             }
-            planList.add(Plan(planName, nodeList, qty));
+            String icon = eleHeaders[0]
+                    .querySelector('img[align="absmiddle"]')
+                    ?.attributes['src'] ??
+                "";
+            String? color;
+            for (var item in eleHeaders[0].styles) {
+              if (item.property == "color") {
+                color = item.value?.span?.text;
+              }
+            }
+            color ??= CommonUtil.colorToHex(AppConfig.schemeColor);
+            planList.add(Plan(planName, subName, nodeList, qty, icon, color));
           }
         }
       }

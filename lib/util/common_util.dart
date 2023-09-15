@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/config/app_config.dart';
+import 'package:v2es/constant/base_constant.dart';
 
 class CommonUtil {
   static String limitText(String text, int maxLength) {
@@ -38,5 +40,34 @@ class CommonUtil {
 
   static double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
+  }
+
+  static Future<T?> routeTo<T extends Object?>(
+      BuildContext context, RouteName routeName,
+      {Object? arguments}) {
+    return Navigator.pushNamed(context, routeName.r, arguments: arguments);
+  }
+
+  static Iterable<RegExpMatch> extractChineseList(String str) {
+    RegExp regExp = RegExp(r"[\u4e00-\u9fff]+");
+    return regExp.allMatches(str);
+  }
+
+  static String extractChinese(String str) {
+    return extractChineseList(str).map((match) => match.group(0)).join("");
+  }
+
+  static String colorToHex(Color color) {
+    return '#${color.value.toRadixString(16).padLeft(8, '0').substring(2)}';
+  }
+  
+  static Color hexToColor(String code) {
+    if (code.startsWith('#')) {
+      code = code.substring(1);
+    }
+    if (code.length != 6) {
+      return AppConfig.schemeColor;
+    }
+    return Color(int.parse(code, radix: 16) + 0xFF000000);
   }
 }
