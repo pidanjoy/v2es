@@ -40,7 +40,7 @@ class _MyAppBarState extends State<MyAppBar> {
           ),
       title: widget.title ??
           const Text(
-            'V2EX',
+              'V2EX',
             style: TextStyle(color: Colors.white, fontSize: 16),
           ),
       actions: widget.actions ?? [],

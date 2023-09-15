@@ -161,13 +161,19 @@ class NodeApi {
                     ?.attributes['src'] ??
                 "";
             String? color;
+            String? backgroundColor;
             for (var item in eleHeaders[0].styles) {
               if (item.property == "color") {
                 color = item.value?.span?.text;
               }
+              if (item.property == "background-color") {
+                backgroundColor = item.value?.span?.text;
+              }
             }
             color ??= CommonUtil.colorToHex(AppConfig.schemeColor);
-            planList.add(Plan(planName, subName, nodeList, qty, icon, color));
+            backgroundColor ??= CommonUtil.colorToHex(AppConfig.schemeColor);
+            planList.add(Plan(planName, subName, nodeList, qty, icon, color,
+                backgroundColor));
           }
         }
       }
