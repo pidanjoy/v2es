@@ -125,7 +125,7 @@ class _PlanPageState extends State<PlanPage> {
                     runSpacing: 8.0,
                     children: e.nodes
                         .map(
-                          (n) =>Text('${n.name}'),
+                          (n) => Text('${n.title}'),
                         )
                         .toList(),
                   );
@@ -144,6 +144,14 @@ class _PlanPageState extends State<PlanPage> {
             }
           },
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(
+            Icons.upload,
+            color: Colors.amber,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
