@@ -39,6 +39,7 @@ flutter:
     - assets/images/icon-196.png
     - assets/images/google_icon_1x.png
     - assets/images/v2ex_network.png
+    - assets/images/my_page_bg.png
 
   # fonts:
   #   - family: Schyler

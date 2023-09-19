@@ -4,6 +4,7 @@ import 'package:v2es/page/home_page.dart';
 import 'package:v2es/page/login_page.dart';
 import 'package:v2es/page/plan_page.dart';
 import 'package:v2es/page/search_page.dart';
+import 'package:v2es/page/setting_page.dart';
 import 'package:v2es/page/topic_page.dart';
 import 'package:v2es/page/unknown_page.dart';
 
@@ -32,6 +33,11 @@ RouteFactory myGenerateRoute = (setting) {
     return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
       return const PlanPage();
+    });
+  } else if (setting.name == RouteName.setting.r) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+      return const SettingPage();
     });
   } else {
     return MaterialPageRoute(builder: (context) => const UnknownPage());

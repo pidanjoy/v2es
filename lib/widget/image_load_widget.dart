@@ -33,7 +33,7 @@ class ImageLoader extends StatelessWidget {
       height: height ?? 32.0,
       padding: padding ?? EdgeInsets.zero,
       margin: margin ?? EdgeInsets.zero,
-      color: Colors.grey,
+      color: const Color.fromRGBO(0, 0, 0, 0.05),
       child: FutureBuilder(
         future: HttpUtil.loadImage(imageUrl),
         builder: (context, snapshot) {

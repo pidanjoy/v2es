@@ -16,6 +16,7 @@ class PlanPage extends StatefulWidget {
 }
 
 class _PlanPageState extends State<PlanPage> {
+
   @override
   void initState() {
     super.initState();
@@ -29,10 +30,10 @@ class _PlanPageState extends State<PlanPage> {
           size: CommonUtil.getScreenHeight(context) * 0.06,
           title: Container(
             alignment: Alignment.centerLeft,
-            child: Text(
-              "V2EX",
+            child: const Text(
+              "位面列表",
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 color: Colors.white,
               ),
             ),
@@ -56,10 +57,9 @@ class _PlanPageState extends State<PlanPage> {
 
               Widget headerLeft(Plan e) => Row(
                     children: [
-                      AnRotation(
-                        child: ImageLoader(
-                          imageUrl: e.icon,
-                        ),
+                      ImageLoader(
+                        imageUrl: e.icon,
+                        circular: 20.0,
                       ),
                       SizedBox(
                         width: CommonUtil.getScreenWidth(context) * 0.02,
@@ -125,7 +125,7 @@ class _PlanPageState extends State<PlanPage> {
                     runSpacing: 8.0,
                     children: e.nodes
                         .map(
-                          (n) => Text('${n.title}'),
+                          (n) => Text(n.title),
                         )
                         .toList(),
                   );

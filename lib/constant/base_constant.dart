@@ -35,6 +35,7 @@ enum RouteName {
   login,
   topic,
   plan,
+  setting,
 }
 
 extension RouteNameExtension on RouteName {
@@ -52,6 +53,8 @@ extension RouteNameExtension on RouteName {
         return "/topic";
       case RouteName.plan:
         return "/plan";
+      case RouteName.setting:
+        return "/setting";
     }
   }
 }
