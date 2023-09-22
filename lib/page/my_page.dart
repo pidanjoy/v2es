@@ -27,7 +27,7 @@ class _MyPageState extends State<MyPage> {
           ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 1),
             child: Container(
-              height: CommonUtil.getScreenHeight(context) * 0.15,
+              height: CommonUtil.getScreenHeight(context) * 0.17,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/my_page_bg.png"),
@@ -40,18 +40,16 @@ class _MyPageState extends State<MyPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // IconButton(
+              //   onPressed: () => CommonUtil.routeTo(context, RouteName.setting),
+              //   icon: Icon(
+              //     Icons.notifications_active_rounded,
+              //     color: Colors.white,
+              //     size: 18,
+              //   ),
+              // ),
               IconButton(
-                onPressed: () =>
-                    CommonUtil.routeTo(context, RouteName.setting),
-                icon: Icon(
-                  Icons.notifications_active_rounded,
-                  color: Colors.white,
-                  size: 18,
-                ),
-              ),
-              IconButton(
-                onPressed: () =>
-                    CommonUtil.routeTo(context, RouteName.setting),
+                onPressed: () => CommonUtil.routeTo(context, RouteName.setting),
                 icon: Icon(
                   Icons.settings,
                   color: Colors.white,
@@ -62,7 +60,7 @@ class _MyPageState extends State<MyPage> {
           ),
           Column(
             children: [
-              SizedBox(height: CommonUtil.getScreenHeight(context) * 0.02),
+              SizedBox(height: CommonUtil.getScreenHeight(context) * 0.015),
               ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
@@ -96,14 +94,105 @@ class _MyPageState extends State<MyPage> {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      "V2EX 第 513215 号会员，加入于 ${CommonUtil.formatTimeDifference(DateTime.parse('2020-10-17 17:37:44 +08:00'))}前",
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 1, right: 1),
+                          child: Text(
+                            "100",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Image(
+                          image:
+                              AssetImage("assets/images/currency/gold@2x.png"),
+                          width: 10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 1, right: 1),
+                          child: Text(
+                            "100",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Image(
+                          image: AssetImage(
+                              "assets/images/currency/silver@2x.png"),
+                          width: 12,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 1, right: 1),
+                          child: Text(
+                            "100",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Image(
+                          image: AssetImage(
+                              "assets/images/currency/bronze@2x.png"),
+                          width: 12,
+                        ),
+                      ],
                     ),
                   ],
+                ),
+              ),
+              SizedBox(
+                width: CommonUtil.getScreenHeight(context) * 0.4,
+                height: 45,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusDirectional.circular(8),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: CommonUtil.getScreenHeight(context) * 0.12,
+                        child: GestureDetector(
+                          onTap: () => {},
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.mark_email_unread_outlined,
+                                color: Colors.cyan,
+                              ),
+                              SizedBox(width: 5),
+                              Text("200"),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 1.0,
+                        height: 20.0,
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: const BoxDecoration(
+                          color: Colors.black38,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: CommonUtil.getScreenHeight(context) * 0.12,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(Icons.calendar_month_outlined),
+                            SizedBox(width: 5),
+                            Text("已签"),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
