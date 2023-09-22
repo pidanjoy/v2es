@@ -12,6 +12,8 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   static const List settingList = [{}, {}, {}];
 
+  var _switchValue = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,6 +32,38 @@ class _SettingPageState extends State<SettingPage> {
           color: Color.fromRGBO(229, 229, 229, 1.0),
           child: ListView(
             children: [
+              Container(
+                margin: const EdgeInsets.only(top: 10, bottom: 5),
+                padding: const EdgeInsets.only(left: 5),
+                child: Text(
+                  "我的",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+
+              Container(
+                color: Colors.white,
+                height: CommonUtil.getScreenHeight(context) * 0.06,
+                margin: const EdgeInsets.only(top: 2, bottom: 2),
+                padding: const EdgeInsets.only(left: 5, right: 7),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("自动签到"),
+                    Container(
+                      height: 10,
+                      child: Switch(value: _switchValue, onChanged: (value) {
+                        setState(() {
+                          _switchValue = value;
+                        });
+                      }),
+                    ),
+                  ],
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 padding: const EdgeInsets.only(left: 5),
@@ -94,7 +128,8 @@ class _SettingPageState extends State<SettingPage> {
               SizedBox(height: 10),
               Container(
                 alignment: Alignment.center,
-                child: ElevatedButton(onPressed: () => {}, child: Text("退出登录")),
+                child: ElevatedButton(
+                    onPressed: () => {}, child: Text("退出登录")),
               )
             ],
           ),
