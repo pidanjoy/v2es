@@ -17,7 +17,7 @@ class MyTabBar extends StatefulWidget {
 }
 
 class _MyTabBarState extends State<MyTabBar> {
-  bool _isExpand = false;
+  // bool _isExpand = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,8 @@ class _MyTabBarState extends State<MyTabBar> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
-              !_isExpand ? widget.tabList.length : widget.tabNodes.length,
+              // !_isExpand ? widget.tabList.length : widget.tabNodes.length,
+              widget.tabList.length,
               itemBuilder: (BuildContext context, int index) {
                 return
                   // !_isExpand
@@ -104,15 +105,16 @@ class _MyTabBarState extends State<MyTabBar> {
                 margin: const EdgeInsets.only(top: 5),
                 child: GestureDetector(
                   child: Icon(
-                    _isExpand
-                        ? Icons.notes_rounded
-                        : Icons.settings_ethernet_rounded,
+                    // _isExpand
+                    //     ?
+                    Icons.notes_rounded,
+                        // : Icons.settings_ethernet_rounded,
                     color: const Color.fromRGBO(0, 0, 0, 0.6),
                     size: 20,
                   ),
                   onTap: () {
                     setState(() {
-                      _isExpand = !_isExpand;
+                      // _isExpand = !_isExpand;
                     });
                   },
                 ),
