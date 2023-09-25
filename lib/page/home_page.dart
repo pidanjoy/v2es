@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
         initBottomNavigationBarItem(
             "记事本", Icons.book_rounded, Icons.menu_book_rounded),
         initBottomNavigationBarItem(
-            "提问", Icons.note_add_rounded, Icons.note_alt_rounded),
+            "创作", Icons.note_add_rounded, Icons.note_alt_rounded),
         initBottomNavigationBarItem(
             "时间轴", Icons.linear_scale, Icons.linear_scale_rounded),
         initBottomNavigationBarItem(
