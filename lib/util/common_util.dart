@@ -66,7 +66,7 @@ class CommonUtil {
       code = code.substring(1);
     }
     if (code.length != 6) {
-      return AppConfig.schemeColor;
+      return AppConfig.gSchemeColor;
     }
     return Color(int.parse(code, radix: 16) + 0xFF000000);
   }
