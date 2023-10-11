@@ -18,6 +18,7 @@ class NodeApi {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }
+    // try
     Response response = await HttpUtil.get(ApiEndpoints.baseUrl);
     var document = html_parse.parse(response.data);
 
@@ -170,8 +171,8 @@ class NodeApi {
                 backgroundColor = item.value?.span?.text;
               }
             }
-            color ??= CommonUtil.colorToHex(AppConfig.schemeColor);
-            backgroundColor ??= CommonUtil.colorToHex(AppConfig.schemeColor);
+            color ??= CommonUtil.colorToHex(AppConfig.gSchemeColor);
+            backgroundColor ??= CommonUtil.colorToHex(AppConfig.gSchemeColor);
             planList.add(Plan(planName, subName, nodeList, qty, icon, color,
                 backgroundColor));
           }

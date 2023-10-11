@@ -3,15 +3,11 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/util/file_util.dart';
 
 class ReqClient {
-  static const bool proxyEnable = true;
-
-  static const proxyHost = '192.168.3.141';
-  static const proxyPort = 1082;
-
   static const int _connectTimeout = 30000;
   static const int _receiveTimeout = 30000;
 
@@ -32,14 +28,14 @@ class ReqClient {
       dio = Dio(options);
       dio!.interceptors.add(ErrorInterceptor());
 
-      if (proxyEnable) {
+      if (AppConfig.gProxyEnable) {
         dio!.httpClientAdapter = IOHttpClientAdapter()
           ..createHttpClient = () => HttpClient()
             ..findProxy = (uri) {
-              return "PROXY $proxyHost:$proxyPort;";
-            }
-            ..badCertificateCallback =
-                (X509Certificate cert, String host, int port) => true;
+              return "PROXY ${AppConfig.gProxyHost}:${AppConfig.gProxyPort};";
+            };
+            // ..badCertificateCallback =
+            //     (X509Certificate cert, String host, int port) => true; // 禁用证书验证
       }
     }
     if (null != options) {

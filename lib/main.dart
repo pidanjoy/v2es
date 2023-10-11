@@ -10,6 +10,7 @@ import 'package:v2es/page/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppConfig().init();
   HomeData homeData = await NodeApi.getHomeData();
   debugPrint("main >>> ${jsonEncode(homeData.topicHeadList[0])}");
   runApp(MultiProvider(providers: [
@@ -25,15 +26,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppConfig.gSchemeColor = Colors.cyan;
     return MaterialApp(
-      title: AppConfig.appName,
+      title: AppConfig.gAppName,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppConfig.schemeColor),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppConfig.gSchemeColor),
         useMaterial3: true,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      home: const HomePage(title: AppConfig.appName),
+      home: HomePage(title: AppConfig.gAppName),
       debugShowCheckedModeBanner: false,
       routes: myRoutes,
       onGenerateRoute: myGenerateRoute,
