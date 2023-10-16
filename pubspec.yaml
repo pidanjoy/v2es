@@ -43,6 +43,11 @@ flutter:
     - assets/images/currency/bronze@2x.png
     - assets/images/currency/gold@2x.png
     - assets/images/currency/silver@2x.png
+    - assets/images/v2es_logo_startup.png
+    - assets/images/v2es_code_startup.png
+    - assets/images/nyan-cat.gif
+    - assets/images/nyan-cat_0.png
+    - assets/images/nyan-cat-nyan.gif
 
   # fonts:
   #   - family: Schyler

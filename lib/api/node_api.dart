@@ -18,8 +18,14 @@ class NodeApi {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }
-    // try
-    Response response = await HttpUtil.get(ApiEndpoints.baseUrl);
+
+    Response response;
+    try {
+      response = await HttpUtil.get(ApiEndpoints.baseUrl);
+    } catch(e) {
+      return HomeData.empty();
+    }
+
     var document = html_parse.parse(response.data);
 
     List<NodeTab> tabList = [];
