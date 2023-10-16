@@ -25,6 +25,8 @@ class HomeData with ChangeNotifier {
 
   HomeData(this._tabList, this._topicHeadList, this._topicHotList);
 
+  HomeData.empty();
+
   Future<void> saveData(
       {List<NodeTab>? tabList,
       List<TopicHead>? topicHeadList,

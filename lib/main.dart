@@ -7,14 +7,15 @@ import 'package:v2es/config/app_config.dart';
 import 'package:v2es/config/route_config.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/home_page.dart';
+import 'package:v2es/page/launch_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppConfig().init();
-  HomeData homeData = await NodeApi.getHomeData();
-  debugPrint("main >>> ${jsonEncode(homeData.topicHeadList[0])}");
+  // HomeData homeData = await NodeApi.getHomeData();
+  // debugPrint("main >>> ${jsonEncode(homeData.topicHeadList[0])}");
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider.value(value: homeData),
+    ChangeNotifierProvider.value(value: HomeData.empty()),
     Provider(
       create: (_) => NodeApi.getPlanList(),
     )
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      home: HomePage(title: AppConfig.gAppName),
+      home: const LaunchPage(),
       debugShowCheckedModeBanner: false,
       routes: myRoutes,
       onGenerateRoute: myGenerateRoute,
