@@ -11,8 +11,12 @@ class ProxyConfigPage extends StatefulWidget {
 }
 
 class _ProxyConfigPageState extends State<ProxyConfigPage> {
-  var _switchValue = false;
-  var _groupValue = "HTTP";
+  var _enableProxy = false;
+  var _proxyType = "HTTP";
+  var _proxyHost = "";
+  var _proxyPort = 0;
+  var _username = "";
+  var _password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +50,10 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                     Container(
                       height: 10,
                       child: Switch(
-                          value: _switchValue,
+                          value: _enableProxy,
                           onChanged: (value) {
                             setState(() {
-                              _switchValue = value;
+                              _enableProxy = value;
                             });
                           }),
                     ),
@@ -70,14 +74,22 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               RadioListTile<String>(
                 value: "HTTP",
                 title: Text("HTTP"),
-                groupValue: _groupValue,
-                onChanged: (value) {},
+                groupValue: _proxyType,
+                onChanged: (value) {
+                  setState(() {
+                    _proxyType = value!;
+                  });
+                },
               ),
               RadioListTile<String>(
                 value: "SOCKS5",
                 title: Text("SOCKS5"),
-                groupValue: _groupValue,
-                onChanged: (value) {},
+                groupValue: _proxyType,
+                onChanged: (value) {
+                  setState(() {
+                    _proxyType = value!;
+                  });
+                },
               ),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
@@ -91,6 +103,17 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                 ),
               ),
               TextField(
+                controller: TextEditingController.fromValue(
+                  TextEditingValue(
+                    text: _proxyHost,
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _proxyHost.length,
+                      ),
+                    ),
+                  ),
+                ),
                 decoration: InputDecoration(
                   // border: OutlineInputBorder(),
                   filled: true,
@@ -137,6 +160,13 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                   hintText: '密码',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  debugPrint("proxy info => $_proxyHost");
+                },
+                child: Text("保存"),
               ),
             ],
           ),
