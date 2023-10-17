@@ -36,6 +36,7 @@ enum RouteName {
   topic,
   plan,
   setting,
+  proxyConfig,
 }
 
 extension RouteNameExtension on RouteName {
@@ -55,6 +56,8 @@ extension RouteNameExtension on RouteName {
         return "/plan";
       case RouteName.setting:
         return "/setting";
+      case RouteName.proxyConfig:
+        return "/proxyConfig";
     }
   }
 }
