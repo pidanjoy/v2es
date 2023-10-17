@@ -126,8 +126,8 @@ class _LaunchPageState extends State<LaunchPage> {
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
-                            onPressed: () =>
-                                CommonUtil.routeTo(context, RouteName.setting),
+                            onPressed: () => CommonUtil.routeTo(
+                                context, RouteName.proxyConfig),
                             child: const Text("配置代理"),
                           ),
                         ],

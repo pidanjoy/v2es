@@ -3,6 +3,7 @@ import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/page/home_page.dart';
 import 'package:v2es/page/login_page.dart';
 import 'package:v2es/page/plan_page.dart';
+import 'package:v2es/page/proxy_config_page.dart';
 import 'package:v2es/page/search_page.dart';
 import 'package:v2es/page/setting_page.dart';
 import 'package:v2es/page/topic_page.dart';
@@ -38,6 +39,11 @@ RouteFactory myGenerateRoute = (setting) {
     return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
       return const SettingPage();
+    });
+  } else if (setting.name == RouteName.proxyConfig.r) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+      return const ProxyConfigPage();
     });
   } else {
     return MaterialPageRoute(builder: (context) => const UnknownPage());
