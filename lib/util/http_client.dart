@@ -8,8 +8,8 @@ import 'package:v2es/util/common_util.dart';
 import 'package:v2es/util/file_util.dart';
 
 class ReqClient {
-  static const int _connectTimeout = 30000;
-  static const int _receiveTimeout = 30000;
+  static const int _connectTimeout = 3000;
+  static const int _receiveTimeout = 3000;
 
   static final ReqClient _instance = ReqClient._internal();
 
