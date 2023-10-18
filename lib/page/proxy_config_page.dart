@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/widget/my_app_bar_widget.dart';
 
 import '../util/common_util.dart';
@@ -14,9 +15,29 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
   var _enableProxy = false;
   var _proxyType = "HTTP";
   var _proxyHost = "";
-  var _proxyPort = 0;
+  var _proxyPort = "";
   var _username = "";
   var _password = "";
+
+  InputDecoration buildInputDecoration(String hintText) => InputDecoration(
+        // border: OutlineInputBorder(),
+        filled: true,
+        fillColor: Colors.grey[200],
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.grey),
+      );
+
+  Container configTitle(String title) => Container(
+        margin: const EdgeInsets.only(top: 10, bottom: 5),
+        padding: const EdgeInsets.only(left: 5),
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +67,8 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("启用代理"),
-                    Container(
+                    const Text("启用代理"),
+                    SizedBox(
                       height: 10,
                       child: Switch(
                           value: _enableProxy,
@@ -60,20 +81,10 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(
-                  "代理类型",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
+              configTitle('代理类型'),
               RadioListTile<String>(
                 value: "HTTP",
-                title: Text("HTTP"),
+                title: const Text("HTTP"),
                 groupValue: _proxyType,
                 onChanged: (value) {
                   setState(() {
@@ -83,7 +94,7 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               ),
               RadioListTile<String>(
                 value: "SOCKS5",
-                title: Text("SOCKS5"),
+                title: const Text("SOCKS5"),
                 groupValue: _proxyType,
                 onChanged: (value) {
                   setState(() {
@@ -94,7 +105,7 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 padding: const EdgeInsets.only(left: 5),
-                child: Text(
+                child: const Text(
                   "连接",
                   style: TextStyle(
                     color: Colors.grey,
@@ -114,59 +125,85 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                     ),
                   ),
                 ),
-                decoration: InputDecoration(
-                  // border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  hintText: '服务器',
-                  hintStyle: TextStyle(color: Colors.grey),
-                ),
+                onChanged: (value) {
+                  setState(() {
+                    _proxyHost = value;
+                  });
+                },
+                decoration: buildInputDecoration('服务器'),
               ),
               TextField(
-                decoration: InputDecoration(
-                  // border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  hintText: '端口',
-                  hintStyle: TextStyle(color: Colors.grey),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10, bottom: 5),
-                padding: const EdgeInsets.only(left: 5),
-                child: Text(
-                  "认证信息（可选）",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
+                controller: TextEditingController.fromValue(
+                  TextEditingValue(
+                    text: _proxyPort,
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _proxyPort.length,
+                      ),
+                    ),
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _proxyPort = value;
+                  });
+                },
+                decoration: buildInputDecoration('端口'),
               ),
+              configTitle('认证信息（可选）'),
               TextField(
-                decoration: InputDecoration(
-                  // border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  hintText: '用户名',
-                  hintStyle: TextStyle(color: Colors.grey),
+                controller: TextEditingController.fromValue(
+                  TextEditingValue(
+                    text: _username,
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _username.length,
+                      ),
+                    ),
+                  ),
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    _username = value;
+                  });
+                },
+                decoration: buildInputDecoration('用户名'),
               ),
               TextField(
+                controller: TextEditingController.fromValue(
+                  TextEditingValue(
+                    text: _password,
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: _password.length,
+                      ),
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _password = value;
+                  });
+                },
                 obscureText: true,
-                decoration: InputDecoration(
-                  // border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  hintText: '密码',
-                  hintStyle: TextStyle(color: Colors.grey),
-                ),
+                decoration: buildInputDecoration('密码'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  debugPrint("proxy info => $_proxyHost");
+                  debugPrint(
+                      "proxy info => $_enableProxy,$_proxyType,$_proxyHost,$_proxyPort,$_username,$_password,");
+                  AppConfig.gProxyParams.proxyEnable = _enableProxy;
+                  AppConfig.gProxyParams.proxyType = _proxyType;
+                  AppConfig.gProxyParams.proxyHost = _proxyHost;
+                  AppConfig.gProxyParams.proxyPort = int.parse(_proxyPort);
+                  AppConfig.gProxyParams.username = _username;
+                  AppConfig.gProxyParams.password = _password;
                 },
-                child: Text("保存"),
+                child: const Text("保存"),
               ),
             ],
           ),

@@ -28,14 +28,14 @@ class ReqClient {
       dio = Dio(options);
       dio!.interceptors.add(ErrorInterceptor());
 
-      if (AppConfig.gProxyEnable) {
+      if (AppConfig.gProxyParams.proxyEnable) {
         dio!.httpClientAdapter = IOHttpClientAdapter()
           ..createHttpClient = () => HttpClient()
             ..findProxy = (uri) {
-              return "PROXY ${AppConfig.gProxyHost}:${AppConfig.gProxyPort};";
+              return "PROXY ${AppConfig.gProxyParams.proxyHost}:${AppConfig.gProxyParams.proxyPort};";
             };
-            // ..badCertificateCallback =
-            //     (X509Certificate cert, String host, int port) => true; // 禁用证书验证
+        // ..badCertificateCallback =
+        //     (X509Certificate cert, String host, int port) => true; // 禁用证书验证
       }
     }
     if (null != options) {
@@ -108,7 +108,7 @@ class ReqClient {
   }
 
   Future<Uint8List?> loadImage(
-    String path, Map<String, dynamic>? params) async {
+      String path, Map<String, dynamic>? params) async {
     File file = await FileUtil.getCacheFile(CommonUtil.getTextIdent(path));
     if (await file.exists()) {
       return file.readAsBytes();

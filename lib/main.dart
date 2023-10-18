@@ -1,13 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
 import 'package:v2es/config/app_config.dart';
 import 'package:v2es/config/route_config.dart';
 import 'package:v2es/model/cache_model.dart';
-import 'package:v2es/page/home_page.dart';
 import 'package:v2es/page/launch_page.dart';
+import 'package:v2es/theme/common_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,15 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppConfig.gSchemeColor = Colors.cyan;
     return MaterialApp(
       title: AppConfig.gAppName,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppConfig.gSchemeColor),
-        useMaterial3: true,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-      ),
+      themeMode: ThemeMode.system,
+      theme: CommonTheme.lightTheme,
+      darkTheme: CommonTheme.darkTheme,
       home: const LaunchPage(),
       debugShowCheckedModeBanner: false,
       routes: myRoutes,
