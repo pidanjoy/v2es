@@ -27,6 +27,16 @@ class HomeData with ChangeNotifier {
 
   HomeData.empty();
 
+  bool isEmpty() =>
+      _tabList.isEmpty || _topicHeadList.isEmpty || _topicHotList.isEmpty;
+
+  void updateProvider(HomeData homeData) {
+    _tabList = homeData.tabList;
+    _topicHeadList = homeData.topicHeadList;
+    _topicHotList = homeData.topicHotList;
+    notifyListeners();
+  }
+
   Future<void> saveData(
       {List<NodeTab>? tabList,
       List<TopicHead>? topicHeadList,

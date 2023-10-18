@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:v2es/config/app_config.dart';
+import 'package:v2es/model/config_model.dart';
+import 'package:v2es/util/http_util.dart';
 import 'package:v2es/widget/my_app_bar_widget.dart';
 
 import '../util/common_util.dart';
@@ -12,12 +14,7 @@ class ProxyConfigPage extends StatefulWidget {
 }
 
 class _ProxyConfigPageState extends State<ProxyConfigPage> {
-  var _enableProxy = false;
-  var _proxyType = "HTTP";
-  var _proxyHost = "";
-  var _proxyPort = "";
-  var _username = "";
-  var _password = "";
+  final _proxyParams = ProxyParams.fromJson(AppConfig.gProxyParams.toJson());
 
   InputDecoration buildInputDecoration(String hintText) => InputDecoration(
         // border: OutlineInputBorder(),
@@ -71,10 +68,10 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                     SizedBox(
                       height: 10,
                       child: Switch(
-                          value: _enableProxy,
+                          value: _proxyParams.proxyEnable,
                           onChanged: (value) {
                             setState(() {
-                              _enableProxy = value;
+                              _proxyParams.proxyEnable = value;
                             });
                           }),
                     ),
@@ -83,25 +80,25 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               ),
               configTitle('代理类型'),
               RadioListTile<String>(
-                value: "HTTP",
+                value: "http",
                 title: const Text("HTTP"),
-                groupValue: _proxyType,
+                groupValue: _proxyParams.proxyType,
                 onChanged: (value) {
                   setState(() {
-                    _proxyType = value!;
+                    _proxyParams.proxyType = value!;
                   });
                 },
               ),
-              RadioListTile<String>(
-                value: "SOCKS5",
-                title: const Text("SOCKS5"),
-                groupValue: _proxyType,
-                onChanged: (value) {
-                  setState(() {
-                    _proxyType = value!;
-                  });
-                },
-              ),
+              // RadioListTile<String>(
+              //   value: "socks5",
+              //   title: const Text("SOCKS5"),
+              //   groupValue: _proxyParams.proxyType,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _proxyParams.proxyType = value!;
+              //     });
+              //   },
+              // ),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 5),
                 padding: const EdgeInsets.only(left: 5),
@@ -116,18 +113,18 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               TextField(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
-                    text: _proxyHost,
+                    text: _proxyParams.proxyHost,
                     selection: TextSelection.fromPosition(
                       TextPosition(
                         affinity: TextAffinity.downstream,
-                        offset: _proxyHost.length,
+                        offset: _proxyParams.proxyHost.length,
                       ),
                     ),
                   ),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _proxyHost = value;
+                    _proxyParams.proxyHost = value;
                   });
                 },
                 decoration: buildInputDecoration('服务器'),
@@ -135,18 +132,18 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               TextField(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
-                    text: _proxyPort,
+                    text: _proxyParams.proxyPort.toString(),
                     selection: TextSelection.fromPosition(
                       TextPosition(
                         affinity: TextAffinity.downstream,
-                        offset: _proxyPort.length,
+                        offset: _proxyParams.proxyPort.toString().length,
                       ),
                     ),
                   ),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _proxyPort = value;
+                    _proxyParams.proxyPort = int.parse(value);
                   });
                 },
                 decoration: buildInputDecoration('端口'),
@@ -155,18 +152,18 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               TextField(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
-                    text: _username,
+                    text: _proxyParams.username,
                     selection: TextSelection.fromPosition(
                       TextPosition(
                         affinity: TextAffinity.downstream,
-                        offset: _username.length,
+                        offset: _proxyParams.username.length,
                       ),
                     ),
                   ),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _username = value;
+                    _proxyParams.username = value;
                   });
                 },
                 decoration: buildInputDecoration('用户名'),
@@ -174,18 +171,18 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               TextField(
                 controller: TextEditingController.fromValue(
                   TextEditingValue(
-                    text: _password,
+                    text: _proxyParams.password,
                     selection: TextSelection.fromPosition(
                       TextPosition(
                         affinity: TextAffinity.downstream,
-                        offset: _password.length,
+                        offset: _proxyParams.password.length,
                       ),
                     ),
                   ),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _password = value;
+                    _proxyParams.password = value;
                   });
                 },
                 obscureText: true,
@@ -193,15 +190,10 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  debugPrint(
-                      "proxy info => $_enableProxy,$_proxyType,$_proxyHost,$_proxyPort,$_username,$_password,");
-                  AppConfig.gProxyParams.proxyEnable = _enableProxy;
-                  AppConfig.gProxyParams.proxyType = _proxyType;
-                  AppConfig.gProxyParams.proxyHost = _proxyHost;
-                  AppConfig.gProxyParams.proxyPort = int.parse(_proxyPort);
-                  AppConfig.gProxyParams.username = _username;
-                  AppConfig.gProxyParams.password = _password;
+                onPressed: () async {
+                  AppConfig.gProxyParams = _proxyParams;
+                  debugPrint(AppConfig.gProxyParams.proxyHost);
+                  HttpUtil.nirvana();
                 },
                 child: const Text("保存"),
               ),

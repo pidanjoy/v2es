@@ -4,20 +4,20 @@ part 'g/config_model.g.dart';
 
 @JsonSerializable()
 class ProxyParams {
-  bool proxyEnable = false;
-  String proxyType = "http";
-  String proxyHost = "127.0.0.1";
-  int proxyPort = 7890;
-  String username = "";
-  String password = "";
+  bool proxyEnable;
+  String proxyType;
+  String proxyHost;
+  int proxyPort;
+  String username;
+  String password;
 
   ProxyParams(
-      {required this.proxyEnable,
-      required this.proxyType,
-      required this.proxyHost,
-      required this.proxyPort,
-      required this.username,
-      required this.password});
+      {this.proxyEnable = false,
+      this.proxyType = "http",
+      this.proxyHost = "127.0.0.1",
+      this.proxyPort = 7890,
+      this.username = "",
+      this.password = ""});
 
   factory ProxyParams.fromJson(Map<String, dynamic> json) =>
       _$ProxyParamsFromJson(json);

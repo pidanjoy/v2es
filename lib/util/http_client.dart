@@ -18,7 +18,12 @@ class ReqClient {
   Dio? dio;
 
   ReqClient._internal({ReqClientOptions? options}) {
+    init(options: options);
+  }
+
+  void init({ReqClientOptions? options}) {
     if (null == dio) {
+      debugPrint(AppConfig.gProxyParams.proxyHost);
       BaseOptions options = BaseOptions(
         connectTimeout: const Duration(seconds: _connectTimeout),
         receiveTimeout: const Duration(seconds: _receiveTimeout),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/my_app_bar_widget.dart';
 
@@ -43,7 +44,6 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
               ),
-
               Container(
                 color: Colors.white,
                 height: CommonUtil.getScreenHeight(context) * 0.06,
@@ -55,11 +55,13 @@ class _SettingPageState extends State<SettingPage> {
                     Text("自动签到"),
                     Container(
                       height: 10,
-                      child: Switch(value: _switchValue, onChanged: (value) {
-                        setState(() {
-                          _switchValue = value;
-                        });
-                      }),
+                      child: Switch(
+                          value: _switchValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _switchValue = value;
+                            });
+                          }),
                     ),
                   ],
                 ),
@@ -80,12 +82,16 @@ class _SettingPageState extends State<SettingPage> {
                 height: CommonUtil.getScreenHeight(context) * 0.06,
                 margin: const EdgeInsets.only(top: 2, bottom: 2),
                 padding: const EdgeInsets.only(left: 5, right: 7),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("代理设置"),
-                    Icon(Icons.chevron_right_outlined),
-                  ],
+                child: GestureDetector(
+                  onTap: () =>
+                      CommonUtil.routeTo(context, RouteName.proxyConfig),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("代理设置"),
+                      Icon(Icons.chevron_right_outlined),
+                    ],
+                  ),
                 ),
               ),
               Container(
@@ -128,8 +134,7 @@ class _SettingPageState extends State<SettingPage> {
               SizedBox(height: 10),
               Container(
                 alignment: Alignment.center,
-                child: ElevatedButton(
-                    onPressed: () => {}, child: Text("退出登录")),
+                child: ElevatedButton(onPressed: () => {}, child: Text("退出登录")),
               )
             ],
           ),

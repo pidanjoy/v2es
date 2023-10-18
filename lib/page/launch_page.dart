@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
@@ -15,20 +13,20 @@ class LaunchPage extends StatefulWidget {
 }
 
 class _LaunchPageState extends State<LaunchPage> {
-  bool isLoading = true;
+  bool _isLoading = true;
 
   Future<void> loadData(HomeData homeDataProvider) async {
-    if (isLoading) {
-      if (homeDataProvider.tabList.isEmpty ||
-          homeDataProvider.topicHeadList.isEmpty ||
-          homeDataProvider.topicHotList.isEmpty) {
+    if (_isLoading) {
+      if (homeDataProvider.isEmpty()) {
         HomeData homeData = await NodeApi.getHomeData();
-        debugPrint("main >>> ${jsonEncode(homeData.topicHeadList)}");
-        homeDataProvider = homeData;
-        setState(() {
-          isLoading = false;
-        });
-        debugPrint("AAA $isLoading");
+        if (!homeData.isEmpty()) {
+          homeDataProvider.updateProvider(homeData);
+          loadData(homeDataProvider);
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       } else {
         CommonUtil.routeTo(context, RouteName.home);
       }
@@ -67,7 +65,7 @@ class _LaunchPageState extends State<LaunchPage> {
                     top: 5, bottom: 15, left: 10, right: 5),
                 alignment: Alignment.centerLeft,
                 child: const Text(
-                  "创意工作者们的社区\nWorld is powered by solitude",
+                  "V2EX创意工作者们的社区\nWorld is powered by solitude.",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -96,7 +94,7 @@ class _LaunchPageState extends State<LaunchPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              isLoading
+              _isLoading
                   ? Image.asset(
                       "assets/images/nyan-cat.gif",
                       width: 100,
@@ -121,7 +119,7 @@ class _LaunchPageState extends State<LaunchPage> {
                           children: [
                             ElevatedButton(
                               onPressed: () => setState(() {
-                                isLoading = true;
+                                _isLoading = true;
                               }),
                               child: const Text("重试"),
                             ),
