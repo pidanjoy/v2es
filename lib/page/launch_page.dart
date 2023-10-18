@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/util/common_util.dart';
@@ -14,28 +15,37 @@ class LaunchPage extends StatefulWidget {
 
 class _LaunchPageState extends State<LaunchPage> {
   bool _isLoading = true;
+  bool _isError = false;
 
   Future<void> loadData(HomeData homeDataProvider) async {
     if (_isLoading) {
-      if (homeDataProvider.isEmpty()) {
-        HomeData homeData = await NodeApi.getHomeData();
-        if (!homeData.isEmpty()) {
-          homeDataProvider.updateProvider(homeData);
-          loadData(homeDataProvider);
-        } else {
-          setState(() {
-            _isLoading = false;
-          });
-        }
+      HomeData homeData = await NodeApi.getHomeData();
+      setState(() {
+        _isLoading = false;
+      });
+      if (!homeData.isEmpty()) {
+        homeDataProvider.updateProvider(homeData);
+        nextPage();
       } else {
-        CommonUtil.routeTo(context, RouteName.home);
+        _isError = true;
       }
+    } else if (!_isError) {
+      nextPage();
     }
+  }
+
+  void nextPage() {
+    CommonUtil.routeTo(context, RouteName.home);
   }
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -100,38 +110,40 @@ class _LaunchPageState extends State<LaunchPage> {
                       width: 100,
                     )
                   : Column(
-                      children: [
-                        Image.asset(
-                          "assets/images/nyan-cat_0.png",
-                          width: 100,
-                        ),
-                        const Text(
-                          "无法连接到V2EX服务器",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () => setState(() {
-                                _isLoading = true;
-                              }),
-                              child: const Text("重试"),
-                            ),
-                            const SizedBox(width: 10),
-                            ElevatedButton(
-                              onPressed: () => CommonUtil.routeTo(
-                                  context, RouteName.proxyConfig),
-                              child: const Text("配置代理"),
-                            ),
-                          ],
-                        ),
-                      ],
+                      children: _isError
+                          ? [
+                              Image.asset(
+                                "assets/images/nyan-cat_0.png",
+                                width: 100,
+                              ),
+                              const Text(
+                                "无法连接到V2EX服务器",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 15),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () => setState(() {
+                                        _isLoading = true;
+                                    }),
+                                    child: const Text("重试"),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  ElevatedButton(
+                                    onPressed: () => CommonUtil.routeTo(
+                                        context, RouteName.proxyConfig),
+                                    child: const Text("配置代理"),
+                                  ),
+                                ],
+                              ),
+                            ]
+                          : [],
                     ),
             ],
           ),

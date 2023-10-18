@@ -35,15 +35,21 @@ class CommonUtil {
   }
 
   static double getScreenWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery
+        .of(context)
+        .size
+        .width;
   }
 
   static double getScreenHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height;
+    return MediaQuery
+        .of(context)
+        .size
+        .height;
   }
 
-  static Future<T?> routeTo<T extends Object?>(
-      BuildContext context, RouteName routeName,
+  static Future<T?> routeTo<T extends Object?>(BuildContext context,
+      RouteName routeName,
       {Object? arguments}) {
     return Navigator.pushNamed(context, routeName.r, arguments: arguments);
   }
@@ -60,7 +66,7 @@ class CommonUtil {
   static String colorToHex(Color color) {
     return '#${color.value.toRadixString(16).padLeft(8, '0').substring(2)}';
   }
-  
+
   static Color hexToColor(String code) {
     if (code.startsWith('#')) {
       code = code.substring(1);
