@@ -8,7 +8,7 @@ class HttpUtil {
 
   static Future<void> nirvana({ReqClientOptions? options}) async {
     ReqClient().dio = null;
-    ReqClient(options: options).dio!;
+    ReqClient().init(options: options);
   }
 
   static void setHeaders(Map<String, dynamic> map) {

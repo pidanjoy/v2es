@@ -99,6 +99,8 @@ class AppConfig {
     if (null != proxyParamsPrefs) {
       _instance.proxyParams =
           ProxyParams.fromJson(convert.jsonDecode(proxyParamsPrefs));
+    } else {
+      _instance.proxyParams = ProxyParams();
     }
   }
 }
