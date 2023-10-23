@@ -12,6 +12,7 @@ class ApiEndpoints {
   static const captchaImageUrl = "$baseUrl/_captcha";
   static const loginUrl = "$baseUrl/signin";
   static const planesUrl = "$baseUrl/planes";
+  static const forgotPasswordUrl = "$baseUrl/forgot";
 
   static userReplyUrl(username) => "$baseUrl/member/$username";
 

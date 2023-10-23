@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:v2es/api/login_api.dart';
 import 'package:v2es/constant/assets_constant.dart';
+import 'package:v2es/constant/base_constant.dart';
+import 'package:v2es/service/login_service.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/image_load_widget.dart';
 import 'package:v2es/widget/my_app_bar_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var _username = "";
+  var _password = "";
+  var _captcha = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Container(
               alignment: Alignment.topLeft,
-              child: Text(
+              child: const Text(
                 "Log in",
                 style: TextStyle(
                   fontSize: 25.0,
@@ -53,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ElevatedButton(
               onPressed: () => {},
               child: Row(
@@ -72,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 elevation: MaterialStateProperty.all(1),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -81,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.grey,
                   width: CommonUtil.getScreenWidth(context) * 0.42,
                 ),
-                Text(
+                const Text(
                   "OR",
                   style: TextStyle(
                     color: Colors.grey,
@@ -95,10 +103,13 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Container(
               height: 45,
               child: TextField(
+                onChanged: (value) {
+                  _username = value;
+                },
                 decoration: InputDecoration(
                   hintText: "用户名或电子邮件",
                   border: OutlineInputBorder(
@@ -112,10 +123,13 @@ class _LoginPageState extends State<LoginPage> {
                 cursorHeight: 25,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
               height: 45,
               child: TextField(
+                onChanged: (value) {
+                  _password = value;
+                },
                 decoration: InputDecoration(
                   hintText: "密码",
                   border: OutlineInputBorder(
@@ -133,17 +147,51 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ImageLoader(
-                  imageUrl: 'https://crates.io/assets/cargo.png',
-                  width: CommonUtil.getScreenWidth(context) * 0.35,
-                  height: CommonUtil.getScreenHeight(context) * 0.08,
-                  circular: 5,
-                  enableEnlarge: true,
+                FutureBuilder(
+                  future: LoginApi.getLoginKey(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    } else {
+                      return GestureDetector(
+                        child: ImageLoader(
+                          imageUrl: ApiEndpoints.captchaImageUrl,
+                          width: CommonUtil.getScreenWidth(context) * 0.35,
+                          height: CommonUtil.getScreenHeight(context) * 0.08,
+                          circular: 5,
+                          enableEnlarge: true,
+                        ),
+                        onTap: () => {
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) {
+                          //       return ImageEnlarge(
+                          //         image: Image.memory(snapshot.data),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+                        },
+                      );
+                    }
+                  },
                 ),
+                // ImageLoader(
+                //   imageUrl: 'https://crates.io/assets/cargo.png',
+                //   width: CommonUtil.getScreenWidth(context) * 0.35,
+                //   height: CommonUtil.getScreenHeight(context) * 0.08,
+                //   circular: 5,
+                //   enableEnlarge: true,
+                // ),
                 Container(
                   width: CommonUtil.getScreenWidth(context) * 0.55,
                   height: CommonUtil.getScreenHeight(context) * 0.08,
                   child: TextField(
+                    onChanged: (value) {
+                      _captcha = value;
+                    },
                     decoration: InputDecoration(
                       hintText: "验证码",
                       hintStyle: TextStyle(
@@ -153,15 +201,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             GestureDetector(
-              child: Text(
+              child: const Text(
                 "忘记密码",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
               ),
-              onTap: () => {},
+              onTap: () => launchUrl(Uri.parse(ApiEndpoints.forgotPasswordUrl)),
             ),
           ],
         ),
@@ -171,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
         height: 50,
         padding: EdgeInsets.all(5),
         child: ElevatedButton(
-          onPressed: () => {},
+          onPressed: () => {debugPrint("xxx: $_username,$_password,$_captcha")},
           child: Container(
             alignment: Alignment.center,
             child: Text("登录"),
