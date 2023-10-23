@@ -76,12 +76,15 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ),
                 ),
-                title: Text(
-                  "Test nickname",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                title: GestureDetector(
+                  onTap: () => CommonUtil.routeTo(context, RouteName.login),
+                  child: Text(
+                    "请先登录",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 subtitle: Column(

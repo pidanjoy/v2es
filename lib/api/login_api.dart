@@ -49,13 +49,15 @@ class LoginApi {
         null == next) {
       return null;
     }
-    return LoginKey(
+    var loginKey = LoginKey(
         cookie: cookie,
         username: username,
         password: password,
         captcha: captcha,
         once: once,
         next: next);
+    HttpUtil.setHeaders(loginKey.toJson());
+    return loginKey;
   }
 
   static Future<Uint8List> getCaptchaImage(
