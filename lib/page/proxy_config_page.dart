@@ -194,6 +194,8 @@ class _ProxyConfigPageState extends State<ProxyConfigPage> {
                   AppConfig.gProxyParams = _proxyParams;
                   debugPrint(AppConfig.gProxyParams.proxyHost);
                   HttpUtil.nirvana();
+                  CommonUtil.showToast("保存成功");
+                  Navigator.pop(context);
                 },
                 child: const Text("保存"),
               ),

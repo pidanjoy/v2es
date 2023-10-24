@@ -11,6 +11,7 @@ class ImageLoader extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
 
   final bool? enableEnlarge;
+  final bool? enableCache;
 
   final GestureTapCallback? onTap;
 
@@ -20,6 +21,7 @@ class ImageLoader extends StatelessWidget {
     this.height,
     this.width,
     this.enableEnlarge,
+    this.enableCache,
     this.circular,
     this.padding,
     this.margin,
@@ -35,12 +37,12 @@ class ImageLoader extends StatelessWidget {
       margin: margin ?? EdgeInsets.zero,
       color: const Color.fromRGBO(0, 0, 0, 0.05),
       child: FutureBuilder(
-        future: HttpUtil.loadImage(imageUrl),
+        future: HttpUtil.loadImage(imageUrl, queryCache: enableCache ?? true),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text("Error: ${snapshot.error}");
+            return const Icon(Icons.signal_wifi_connected_no_internet_4);
           } else {
             return null != enableEnlarge && enableEnlarge!
                 ? GestureDetector(
