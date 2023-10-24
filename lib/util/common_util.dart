@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 
@@ -35,21 +36,15 @@ class CommonUtil {
   }
 
   static double getScreenWidth(BuildContext context) {
-    return MediaQuery
-        .of(context)
-        .size
-        .width;
+    return MediaQuery.of(context).size.width;
   }
 
   static double getScreenHeight(BuildContext context) {
-    return MediaQuery
-        .of(context)
-        .size
-        .height;
+    return MediaQuery.of(context).size.height;
   }
 
-  static Future<T?> routeTo<T extends Object?>(BuildContext context,
-      RouteName routeName,
+  static Future<T?> routeTo<T extends Object?>(
+      BuildContext context, RouteName routeName,
       {Object? arguments}) {
     return Navigator.pushNamed(context, routeName.r, arguments: arguments);
   }
@@ -75,5 +70,22 @@ class CommonUtil {
       return AppConfig.gSchemeColor;
     }
     return Color(int.parse(code, radix: 16) + 0xFF000000);
+  }
+
+  static Image placeholderImage(double width) => Image.asset(
+        "assets/images/nyan-cat.gif",
+        width: width,
+      );
+
+  static void showToast(String text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 }

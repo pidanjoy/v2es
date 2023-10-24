@@ -20,6 +20,29 @@ class _LoginPageState extends State<LoginPage> {
   var _password = "";
   var _captcha = "";
 
+  FutureBuilder buildCaptchaImageWidget() => FutureBuilder(
+        future: LoginApi.getLoginKey(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else {
+            return GestureDetector(
+              child: const ImageLoader(
+                imageUrl: ApiEndpoints.captchaImageUrl,
+                width: 128,
+                height: 32,
+                circular: 5,
+                enableEnlarge: true,
+                enableCache: false,
+              ),
+              onDoubleTap: () => setState(() {
+                buildCaptchaImageWidget();
+              }),
+            );
+          }
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
               '注册',
               style: TextStyle(color: Colors.white),
             ),
-            onTap: () => {},
+            onTap: () => launchUrl(Uri.parse(ApiEndpoints.registerUrl)),
           ),
           SizedBox(
             width: CommonUtil.getScreenWidth(context) * 0.05,
@@ -62,48 +85,48 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 15),
-            ElevatedButton(
-              onPressed: () => {},
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.g_translate_rounded),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text("Continue with Goolge"),
-                    ),
-                  ),
-                ],
-              ),
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(1),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  width: CommonUtil.getScreenWidth(context) * 0.42,
-                ),
-                const Text(
-                  "OR",
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12.0,
-                  ),
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey,
-                  width: CommonUtil.getScreenWidth(context) * 0.42,
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
+            // ElevatedButton(
+            //   onPressed: () => {},
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Icon(Icons.g_translate_rounded),
+            //       Expanded(
+            //         child: Container(
+            //           alignment: Alignment.center,
+            //           child: Text("Continue with Goolge"),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            //   style: ButtonStyle(
+            //     elevation: MaterialStateProperty.all(1),
+            //   ),
+            // ),
+            // const SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Container(
+            //       height: 1,
+            //       color: Colors.grey,
+            //       width: CommonUtil.getScreenWidth(context) * 0.42,
+            //     ),
+            //     const Text(
+            //       "OR",
+            //       style: TextStyle(
+            //         color: Colors.grey,
+            //         fontSize: 12.0,
+            //       ),
+            //     ),
+            //     Container(
+            //       height: 1,
+            //       color: Colors.grey,
+            //       width: CommonUtil.getScreenWidth(context) * 0.42,
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 15),
             Container(
               height: 45,
               child: TextField(
@@ -143,59 +166,24 @@ class _LoginPageState extends State<LoginPage> {
                 cursorHeight: 25,
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FutureBuilder(
-                  future: LoginApi.getLoginKey(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else {
-                      return GestureDetector(
-                        child: ImageLoader(
-                          imageUrl: ApiEndpoints.captchaImageUrl,
-                          width: CommonUtil.getScreenWidth(context) * 0.35,
-                          height: CommonUtil.getScreenHeight(context) * 0.08,
-                          circular: 5,
-                          enableEnlarge: true,
-                        ),
-                        onTap: () => {
-                          // Navigator.of(context).push(
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return ImageEnlarge(
-                          //         image: Image.memory(snapshot.data),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
-                        },
-                      );
-                    }
-                  },
-                ),
-                // ImageLoader(
-                //   imageUrl: 'https://crates.io/assets/cargo.png',
-                //   width: CommonUtil.getScreenWidth(context) * 0.35,
-                //   height: CommonUtil.getScreenHeight(context) * 0.08,
-                //   circular: 5,
-                //   enableEnlarge: true,
-                // ),
-                Container(
+                buildCaptchaImageWidget(),
+                SizedBox(
                   width: CommonUtil.getScreenWidth(context) * 0.55,
                   height: CommonUtil.getScreenHeight(context) * 0.08,
                   child: TextField(
                     onChanged: (value) {
                       _captcha = value;
                     },
-                    decoration: InputDecoration(
-                      hintText: "验证码",
+                    decoration: const InputDecoration(
+                      hintText: "验证码(双击图片刷新)",
                       hintStyle: TextStyle(
-                          fontSize: 14, textBaseline: TextBaseline.alphabetic),
+                        fontSize: 14,
+                        textBaseline: TextBaseline.alphabetic,
+                      ),
                     ),
                   ),
                 ),
@@ -219,7 +207,10 @@ class _LoginPageState extends State<LoginPage> {
         height: 50,
         padding: EdgeInsets.all(5),
         child: ElevatedButton(
-          onPressed: () => {debugPrint("xxx: $_username,$_password,$_captcha")},
+          onPressed: () {
+            debugPrint("xxx: $_username,$_password,$_captcha");
+            CommonUtil.showToast("密码错误！");
+          },
           child: Container(
             alignment: Alignment.center,
             child: Text("登录"),

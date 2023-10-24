@@ -25,8 +25,8 @@ class ReqClient {
     if (null == dio) {
       debugPrint(AppConfig.gProxyParams.proxyHost);
       BaseOptions options = BaseOptions(
-        connectTimeout: const Duration(seconds: _connectTimeout),
-        receiveTimeout: const Duration(seconds: _receiveTimeout),
+        connectTimeout: const Duration(milliseconds: _connectTimeout),
+        receiveTimeout: const Duration(milliseconds: _receiveTimeout),
         headers: {},
       );
 
@@ -113,10 +113,12 @@ class ReqClient {
   }
 
   Future<Uint8List?> loadImage(
-      String path, Map<String, dynamic>? params) async {
+      String path, Map<String, dynamic>? params, bool queryLocalDir) async {
     File file = await FileUtil.getCacheFile(CommonUtil.getTextIdent(path));
-    if (await file.exists()) {
-      return file.readAsBytes();
+    if (queryLocalDir) {
+      if (await file.exists()) {
+        return file.readAsBytes();
+      }
     }
 
     var response = await dio!.get(path,

@@ -11,6 +11,7 @@ class ApiEndpoints {
   static const loginKeyUrl = "$baseUrl/signin";
   static const captchaImageUrl = "$baseUrl/_captcha";
   static const loginUrl = "$baseUrl/signin";
+  static const registerUrl = "$baseUrl/signup";
   static const planesUrl = "$baseUrl/planes";
   static const forgotPasswordUrl = "$baseUrl/forgot";
 
