@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:v2es/api/login_api.dart';
 import 'package:v2es/constant/assets_constant.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/service/login_service.dart';
@@ -21,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   var _captcha = "";
 
   FutureBuilder buildCaptchaImageWidget() => FutureBuilder(
-        future: LoginApi.getLoginKey(),
+        future: LoginService.getLoginKey(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
@@ -85,48 +84,48 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 15),
-            // ElevatedButton(
-            //   onPressed: () => {},
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Icon(Icons.g_translate_rounded),
-            //       Expanded(
-            //         child: Container(
-            //           alignment: Alignment.center,
-            //           child: Text("Continue with Goolge"),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            //   style: ButtonStyle(
-            //     elevation: MaterialStateProperty.all(1),
-            //   ),
-            // ),
-            // const SizedBox(height: 20),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Container(
-            //       height: 1,
-            //       color: Colors.grey,
-            //       width: CommonUtil.getScreenWidth(context) * 0.42,
-            //     ),
-            //     const Text(
-            //       "OR",
-            //       style: TextStyle(
-            //         color: Colors.grey,
-            //         fontSize: 12.0,
-            //       ),
-            //     ),
-            //     Container(
-            //       height: 1,
-            //       color: Colors.grey,
-            //       width: CommonUtil.getScreenWidth(context) * 0.42,
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: () => {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.g_translate_rounded),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Text("Continue with Goolge"),
+                    ),
+                  ),
+                ],
+              ),
+              style: ButtonStyle(
+                elevation: MaterialStateProperty.all(1),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  width: CommonUtil.getScreenWidth(context) * 0.42,
+                ),
+                const Text(
+                  "OR",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12.0,
+                  ),
+                ),
+                Container(
+                  height: 1,
+                  color: Colors.grey,
+                  width: CommonUtil.getScreenWidth(context) * 0.42,
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
             Container(
               height: 45,
               child: TextField(
@@ -207,9 +206,10 @@ class _LoginPageState extends State<LoginPage> {
         height: 50,
         padding: EdgeInsets.all(5),
         child: ElevatedButton(
-          onPressed: () {
-            debugPrint("xxx: $_username,$_password,$_captcha");
-            CommonUtil.showToast("密码错误！");
+          onPressed: () async {
+            String? cookie =
+                await LoginService.getCookie(_username, _password, _captcha);
+            debugPrint("xxx: $_username,$_password,$_captcha,$cookie");
           },
           child: Container(
             alignment: Alignment.center,

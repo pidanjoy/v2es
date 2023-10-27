@@ -49,15 +49,13 @@ class LoginApi {
         null == next) {
       return null;
     }
-    var loginKey = LoginKey(
+    return LoginKey(
         cookie: cookie,
         username: username,
         password: password,
         captcha: captcha,
         once: once,
         next: next);
-    HttpUtil.setHeaders(loginKey.toJson());
-    return loginKey;
   }
 
   static Future<Uint8List> getCaptchaImage(
@@ -83,6 +81,7 @@ class LoginApi {
 
     Response response = await HttpUtil.postForm(ApiEndpoints.loginUrl, params,
         options: options);
+    debugPrint("login >> ${response}");
     if (response.statusCode == 302) {
       return response.headers["set-cookie"]!.join(";");
     } else {
