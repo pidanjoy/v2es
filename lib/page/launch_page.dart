@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:v2es/api/node_api.dart';
-import 'package:v2es/config/app_config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:v2es/constant/base_constant.dart';
-import 'package:v2es/model/cache_model.dart';
+import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/util/common_util.dart';
 
 class LaunchPage extends StatefulWidget {
@@ -14,30 +12,6 @@ class LaunchPage extends StatefulWidget {
 }
 
 class _LaunchPageState extends State<LaunchPage> {
-  bool _isLoading = true;
-  bool _isError = false;
-
-  Future<void> loadData(HomeData homeDataProvider) async {
-    if (_isLoading) {
-      HomeData homeData = await NodeApi.getHomeData();
-      setState(() {
-        _isLoading = false;
-      });
-      if (!homeData.isEmpty()) {
-        homeDataProvider.updateProvider(homeData);
-        nextPage();
-      } else {
-        _isError = true;
-      }
-    } else if (!_isError) {
-      nextPage();
-    }
-  }
-
-  void nextPage() {
-    CommonUtil.routeTo(context, RouteName.home);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -48,12 +22,43 @@ class _LaunchPageState extends State<LaunchPage> {
     super.dispose();
   }
 
+  get _errorWidget => (BuildContext context, WidgetRef ref) => Column(
+        children: [
+          Image.asset(
+            "assets/images/nyan-cat_0.png",
+            width: 100,
+          ),
+          const Text(
+            "无法连接到V2EX服务器",
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  ref.refresh(homeDataProviderProvider);
+                },
+                child: const Text("重试"),
+              ),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () =>
+                    CommonUtil.routeTo(context, RouteName.proxyConfig),
+                child: const Text("配置代理"),
+              ),
+            ],
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
-    final homeDataProvider = Provider.of<HomeData>(context);
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
-      loadData(homeDataProvider);
-    });
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -104,47 +109,33 @@ class _LaunchPageState extends State<LaunchPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              _isLoading
-                  ? Image.asset(
-                      "assets/images/nyan-cat.gif",
-                      width: 100,
-                    )
-                  : Column(
-                      children: _isError
-                          ? [
-                              Image.asset(
-                                "assets/images/nyan-cat_0.png",
-                                width: 100,
-                              ),
-                              const Text(
-                                "无法连接到V2EX服务器",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () => setState(() {
-                                        _isLoading = true;
-                                    }),
-                                    child: const Text("重试"),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  ElevatedButton(
-                                    onPressed: () => CommonUtil.routeTo(
-                                        context, RouteName.proxyConfig),
-                                    child: const Text("配置代理"),
-                                  ),
-                                ],
-                              ),
-                            ]
-                          : [],
-                    ),
+              Consumer(
+                builder: (context, ref, _) {
+                  final homeData = ref.watch(homeDataProviderProvider);
+                  debugPrint("zzz${homeData}");
+                  return homeData.when(
+                    error: (err, stack) {
+                      debugPrint("aaa${homeData}");
+                      return _errorWidget(context, ref);
+                    },
+                    loading: () =>
+                        Image.asset("assets/images/nyan-cat.gif", width: 100),
+                    data: (homeData) {
+                      if (homeData.isEmpty()) {
+                        debugPrint("bbb${homeData}");
+                        return _errorWidget(context, ref);
+                      }
+                      debugPrint("ccc${homeData}");
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        debugPrint("eeee${homeData}");
+                        CommonUtil.routeTo(context, RouteName.home);
+                      });
+                      debugPrint("xxx${homeData}");
+                      return Container();
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

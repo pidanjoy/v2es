@@ -71,7 +71,7 @@ class NodeApi {
           if (null == rankUp || rankUp.isEmpty) {
             rankUp = "0";
           }
-          debugPrint("xxx =-> $rankUp");
+          // debugPrint("xxx =-> $rankUp");
           DateTime? lastReplyTime;
           var replyTime =
               eleTopicInfo?.getElementsByTagName("span")[0].attributes['title'];

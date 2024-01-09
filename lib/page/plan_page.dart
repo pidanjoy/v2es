@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:provider/provider.dart';
 import 'package:v2es/config/app_config.dart';
 import 'package:v2es/model/node_model.dart';
+import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/an_rotation_widget.dart';
 import 'package:v2es/widget/image_load_widget.dart';
@@ -16,7 +18,6 @@ class PlanPage extends StatefulWidget {
 }
 
 class _PlanPageState extends State<PlanPage> {
-
   @override
   void initState() {
     super.initState();
@@ -39,22 +40,12 @@ class _PlanPageState extends State<PlanPage> {
             ),
           ),
         ),
-        body: FutureBuilder(
-          future: context.watch<Future<List<Plan>>>(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const TopicLoadingWidget();
-            } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            } else {
-              for (var item in snapshot.data!) {
-                debugPrint(item.name);
-                debugPrint(item.subName);
-                debugPrint(item.icon);
-                debugPrint("${item.qty}");
-                debugPrint(item.color);
-              }
-
+        body: Consumer(builder: (context, ref, _) {
+          final planList = ref.watch(planListProvider);
+          return planList.when(
+            loading: () => const TopicLoadingWidget(),
+            error: (error, stack) => const Text("Error: xxx"),
+            data: (list) {
               Widget headerLeft(Plan e) => Row(
                     children: [
                       ImageLoader(
@@ -96,7 +87,7 @@ class _PlanPageState extends State<PlanPage> {
               Widget header(Plan e) => GestureDetector(
                     onTap: () {
                       setState(() {
-                        for (var i in snapshot.data!) {
+                        for (var i in list) {
                           if (i.name != e.name) {
                             i.isExpand = false;
                           }
@@ -129,21 +120,17 @@ class _PlanPageState extends State<PlanPage> {
                         )
                         .toList(),
                   );
-
-              Widget listView = ListView(
-                children: snapshot.data!
-                    .map(
-                      (e) => Column(
-                        children:
-                            e.isExpand ? [header(e), nodes(e)] : [header(e)],
-                      ),
-                    )
-                    .toList(),
-              );
-              return listView;
-            }
-          },
-        ),
+              return ListView(
+                  children: list
+                      .map((e) => Column(
+                            children: e.isExpand
+                                ? [header(e), nodes(e)]
+                                : [header(e)],
+                          ))
+                      .toList());
+            },
+          );
+        }),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: Icon(

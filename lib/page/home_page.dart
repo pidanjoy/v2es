@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:provider/provider.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/my_page.dart';
 import 'package:v2es/page/notebook_page.dart';
 import 'package:v2es/page/timeline_page.dart';
 import 'package:v2es/page/write_page.dart';
+import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/widget/search_bar_widget.dart';
 import 'package:v2es/widget/tab_bar_widget.dart';
 import 'package:v2es/widget/topic_list_widget.dart';
@@ -30,64 +32,56 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       // title: Text(widget.title),
       // ),
-      body: SafeArea(
-        child: Container(alignment: Alignment.center, child: buildView()),
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: initFloatingActionButton(),
       bottomNavigationBar: initBottomNavigationBar(),
-    );
-  }
-
-  Consumer<HomeData> buildView() {
-    return Consumer<HomeData>(
-      builder: (context, HomeData homeDataProvider, child) => PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _index = index;
-          });
-        },
-        children: [
-          Container(
-            alignment: Alignment.topLeft,
-            child: Column(
+      body: SafeArea(
+        child: Container(
+          alignment: Alignment.center,
+          child: Consumer(builder: (context, ref, _) {
+            final homeData = ref.watch(homeDataProviderProvider);
+            return PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _index = index;
+                });
+              },
               children: [
-                MySearchBar(
-                  isFixed: true,
-                  topicHotList: homeDataProvider.topicHotList,
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    children: [
+                      MySearchBar(
+                        isFixed: true,
+                        topicHotList: homeData.value?.topicHeadList ?? [],
+                      ),
+                      MyTabBar(
+                        tabList: homeData.value?.tabList ?? [],
+                        tabNodes: [],
+                      ),
+                      Expanded(
+                        child: TopicList(
+                            topicHeadList: homeData.value?.topicHeadList ?? []),
+                      ),
+                    ],
+                  ),
                 ),
-                MyTabBar(
-                  tabList: homeDataProvider.tabList,
-                  tabNodes: [
-                    "程序员",
-                    "Python",
-                    "iDev",
-                    "Android",
-                    "Linux",
-                    "node.js",
-                    "云计算",
-                    "宽带症候群"
-                  ],
-                ),
-                Expanded(
-                  child:
-                      TopicList(topicHeadList: homeDataProvider.topicHeadList),
-                ),
+                const NotebookPage(),
+                const WritePage(),
+                const TimelinePage(),
+                const MyPage(),
               ],
-            ),
-          ),
-          const NotebookPage(),
-          const WritePage(),
-          const TimelinePage(),
-          const MyPage(),
-        ],
+            );
+          }),
+        ),
       ),
     );
   }

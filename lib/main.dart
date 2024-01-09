@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:v2es/api/node_api.dart';
 import 'package:v2es/config/app_config.dart';
+import 'package:v2es/config/error_config.dart';
 import 'package:v2es/config/route_config.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/launch_page.dart';
@@ -9,15 +11,10 @@ import 'package:v2es/theme/common_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppConfig().init();
-  // HomeData homeData = await NodeApi.getHomeData();
-  // debugPrint("main >>> ${jsonEncode(homeData.topicHeadList[0])}");
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider.value(value: HomeData.empty()),
-    Provider(
-      create: (_) => NodeApi.getPlanList(),
-    )
-  ], child: const MyApp()));
+  AppError.init();
+  AppConfig()
+      .init()
+      .then((value) => runApp(const ProviderScope(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,6 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: myRoutes,
       onGenerateRoute: myGenerateRoute,
+      builder: EasyLoading.init(),
     );
   }
 }
