@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:v2es/api/node_api.dart';
 import 'package:v2es/model/node_model.dart';
+import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/util/common_util.dart';
 
 class MyTabBar extends StatefulWidget {
@@ -41,24 +44,31 @@ class _MyTabBarState extends State<MyTabBar> {
                     Container(
                   margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
                   width: 60,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        if (_current != index) {}
-                        _current = index;
-                      });
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      return TextButton(
+                        onPressed: () {
+                          setState(() {
+                            if (_current != index) {
+                              NodeApi.currentTab = widget.tabList[index].href;
+                              ref.refresh(homeDataProviderProvider);
+                            }
+                            _current = index;
+                          });
+                        },
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.all(1.0))),
+                        child: Text(
+                          widget.tabList[index].name,
+                          style: index != _current
+                              ? const TextStyle(
+                                  fontSize: 14, color: Colors.blueGrey)
+                              : const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                        ),
+                      );
                     },
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                            const EdgeInsets.all(1.0))),
-                    child: Text(
-                      widget.tabList[index].name,
-                      style: index != _current
-                          ? const TextStyle(
-                              fontSize: 14, color: Colors.blueGrey)
-                          : const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w800),
-                    ),
                   ),
                 );
                 // : Container(
