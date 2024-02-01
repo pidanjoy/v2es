@@ -14,15 +14,22 @@ import 'package:v2es/util/http_util.dart';
 import 'package:html/parser.dart' as html_parse;
 
 class NodeApi {
-  static Future<HomeData> getHomeData({Map<String, dynamic>? headers}) async {
+  static Future<HomeData> getHomeData(
+      {Map<String, dynamic>? headers, String? tab}) async {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }
 
     Response response;
     try {
-      response = await HttpUtil.get(ApiEndpoints.baseUrl);
-    } catch(e) {
+      String params = "?tab=";
+      if (null == tab) {
+        params += "hot";
+      } else {
+        params += tab;
+      }
+      response = await HttpUtil.get(ApiEndpoints.baseUrl + params);
+    } catch (e) {
       return HomeData.empty();
     }
 
@@ -39,6 +46,12 @@ class NodeApi {
         tabList.add(NodeTab(name: tabName, href: tabHref));
       }
     }
+    tabList.sort((a, b) {
+      const order = {'最热': 1, '全部': 2};
+      int ai = order[a.name] ?? 3;
+      int bi = order[b.name] ?? 3;
+      return ai.compareTo(bi);
+    });
 
     var eleTopicList = document.getElementsByClassName('cell item');
     List<TopicHead> topicHeadList = [];

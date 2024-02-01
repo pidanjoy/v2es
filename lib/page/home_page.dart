@@ -32,7 +32,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       // appBar: AppBar(
       // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       MyTabBar(
                         tabList: homeData.value?.tabList ?? [],
-                        tabNodes: [],
+                        tabNodes: const [],
                       ),
                       Expanded(
                         child: TopicList(

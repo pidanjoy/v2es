@@ -19,6 +19,8 @@ class MyTabBar extends StatefulWidget {
 class _MyTabBarState extends State<MyTabBar> {
   // bool _isExpand = false;
 
+  int _current = 0;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -30,38 +32,35 @@ class _MyTabBarState extends State<MyTabBar> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
-              // !_isExpand ? widget.tabList.length : widget.tabNodes.length,
-              widget.tabList.length,
+                  // !_isExpand ? widget.tabList.length : widget.tabNodes.length,
+                  widget.tabList.length,
               itemBuilder: (BuildContext context, int index) {
                 return
-                  // !_isExpand
-                  //   ?
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                    width: 60,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
+                    // !_isExpand
+                    //   ?
+                    Container(
+                  margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                  width: 60,
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        if (_current != index) {}
+                        _current = index;
+                      });
+                    },
+                    style: ButtonStyle(
                         padding: MaterialStateProperty.all(
-                            const EdgeInsets.all(1.0)),
-                      ),
-                      child: Text(
-                        widget.tabList[index].name,
-                        style: index != 0
-                            ? const TextStyle(
-                          fontSize: 14,
-                        )
-                            : const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          // decoration: TextDecoration.underline,
-                          // decorationStyle: TextDecorationStyle.solid,
-                          // decorationColor: Colors.grey,
-                          // decorationThickness: 3.0,
-                        ),
-                      ),
+                            const EdgeInsets.all(1.0))),
+                    child: Text(
+                      widget.tabList[index].name,
+                      style: index != _current
+                          ? const TextStyle(
+                              fontSize: 14, color: Colors.blueGrey)
+                          : const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w800),
                     ),
-                  );
+                  ),
+                );
                 // : Container(
                 //     margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
                 //     child: TextButton(
@@ -82,45 +81,45 @@ class _MyTabBarState extends State<MyTabBar> {
               },
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                width: 1.0,
-                height: 40.0,
-                margin: const EdgeInsets.only(top: 5),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(-3, 0),
-                      blurRadius: 3.0,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 35,
-                margin: const EdgeInsets.only(top: 5),
-                child: GestureDetector(
-                  child: Icon(
-                    // _isExpand
-                    //     ?
-                    Icons.notes_rounded,
-                        // : Icons.settings_ethernet_rounded,
-                    color: const Color.fromRGBO(0, 0, 0, 0.6),
-                    size: 20,
-                  ),
-                  onTap: () {
-                    setState(() {
-                      // _isExpand = !_isExpand;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     Container(
+          //       width: 1.0,
+          //       height: 40.0,
+          //       margin: const EdgeInsets.only(top: 5),
+          //       decoration: const BoxDecoration(
+          //         color: Colors.white,
+          //         boxShadow: [
+          //           BoxShadow(
+          //             color: Colors.grey,
+          //             offset: Offset(-3, 0),
+          //             blurRadius: 3.0,
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //     Container(
+          //       width: 35,
+          //       margin: const EdgeInsets.only(top: 5),
+          //       child: GestureDetector(
+          //         child: Icon(
+          //           // _isExpand
+          //           //     ?
+          //           Icons.notes_rounded,
+          //               // : Icons.settings_ethernet_rounded,
+          //           color: const Color.fromRGBO(0, 0, 0, 0.6),
+          //           size: 20,
+          //         ),
+          //         onTap: () {
+          //           setState(() {
+          //             // _isExpand = !_isExpand;
+          //           });
+          //         },
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
