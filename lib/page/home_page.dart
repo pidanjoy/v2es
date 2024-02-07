@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // import 'package:provider/provider.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/my_page.dart';
@@ -43,43 +44,37 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
-          child: Consumer(builder: (context, ref, _) {
-            final homeData = ref.watch(homeDataProviderProvider);
-            return PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _index = index;
-                });
-              },
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    children: [
-                      MySearchBar(
-                        isFixed: true,
-                        topicHotList: homeData.value?.topicHeadList ?? [],
-                      ),
-                      MyTabBar(
-                        tabList: homeData.value?.tabList ?? [],
-                        tabNodes: const [],
-                      ),
-                      Expanded(
-                        child: TopicList(
-                            topicHeadList: homeData.value?.topicHeadList ?? []),
-                      ),
-                    ],
-                  ),
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _index = index;
+              });
+            },
+            children: [
+              Container(
+                alignment: Alignment.topLeft,
+                child: Column(
+                  children: [
+                    MySearchBar(
+                      isFixed: true,
+                    ),
+                    MyTabBar(
+                    ),
+                    Expanded(
+                      child: TopicList()
+                          // topicHeadList: homeData.value?.topicHeadList ?? []),
+                    ),
+                  ],
                 ),
-                const NotebookPage(),
-                const WritePage(),
-                const TimelinePage(),
-                const MyPage(),
-              ],
-            );
-          }),
+              ),
+              // const NotebookPage(),
+              const WritePage(),
+              // const TimelinePage(),
+              const MyPage(),
+            ],
+          ),
         ),
       ),
     );
@@ -128,12 +123,12 @@ class _HomePageState extends State<HomePage> {
       items: [
         initBottomNavigationBarItem(
             "首页", Icons.home_rounded, Icons.home_work_rounded),
-        initBottomNavigationBarItem(
-            "记事本", Icons.book_rounded, Icons.menu_book_rounded),
+        // initBottomNavigationBarItem(
+        //     "记事本", Icons.book_rounded, Icons.menu_book_rounded),
         initBottomNavigationBarItem(
             "创作", Icons.note_add_rounded, Icons.note_alt_rounded),
-        initBottomNavigationBarItem(
-            "时间轴", Icons.linear_scale, Icons.linear_scale_rounded),
+        // initBottomNavigationBarItem(
+        //     "时间轴", Icons.linear_scale, Icons.linear_scale_rounded),
         initBottomNavigationBarItem(
             "我的", Icons.android_rounded, Icons.insert_emoticon_rounded),
       ],

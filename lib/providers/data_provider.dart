@@ -10,6 +10,8 @@ part 'data_provider.g.dart';
 //
 // });
 
+final tabProvider = Provider<NodeTab>((ref) => NodeTab(name: "最热", href: "hot"));
+
 @riverpod
 Future<HomeData> homeDataProvider(HomeDataProviderRef ref) async {
   return await NodeApi.getHomeData();

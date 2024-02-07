@@ -8,12 +8,12 @@ import 'package:v2es/util/common_util.dart';
 class MyTabBar extends StatefulWidget {
   const MyTabBar({
     super.key,
-    required this.tabList,
-    required this.tabNodes,
+    // required this.tabList,
+    // required this.tabNodes,
   });
 
-  final List<NodeTab> tabList;
-  final List<String> tabNodes;
+  // final List<NodeTab> tabList;
+  // final List<String> tabNodes;
 
   @override
   State<MyTabBar> createState() => _MyTabBarState();
@@ -31,66 +31,79 @@ class _MyTabBarState extends State<MyTabBar> {
       child: Stack(
         children: [
           SizedBox(
-            width: CommonUtil.getScreenWidth(context) - 40,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount:
-                  // !_isExpand ? widget.tabList.length : widget.tabNodes.length,
-                  widget.tabList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return
-                    // !_isExpand
-                    //   ?
-                    Container(
-                  margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                  width: 60,
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      return TextButton(
-                        onPressed: () {
-                          setState(() {
-                            if (_current != index) {
-                              NodeApi.currentTab = widget.tabList[index].href;
-                              ref.refresh(homeDataProviderProvider);
-                            }
-                            _current = index;
-                          });
+              width: CommonUtil.getScreenWidth(context) - 40,
+              child: Consumer(builder: (context, ref, _) {
+                final homeData = ref.watch(homeDataProviderProvider);
+                var tabList = homeData.value?.tabList ?? [];
+                var tabNodes = [];
+
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount:
+                      // !_isExpand ? widget.tabList.length : widget.tabNodes.length,
+                      tabList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return
+                        // !_isExpand
+                        //   ?
+                        Container(
+                      margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      width: 60,
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final homeData = ref.watch(homeDataProviderProvider);
+
+                          return TextButton(
+                            onPressed: () {
+                              setState(() {
+                                debugPrint("1111$_current,$index");
+                                if (_current != index) {
+                                  // ref.read(tabProvider).href =
+                                  //     tabList[index].href;
+                                  // ref.read(tabProvider).name =
+                                  //     tabList[index].name;
+                                  debugPrint("xxx");
+                                  ref.refresh(homeDataProviderProvider);
+                                }
+                                _current = index;
+                              });
+                            },
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                    const EdgeInsets.all(1.0))),
+                            child: Text(
+                              tabList[index].name,
+                              style: index != _current
+                                  ? const TextStyle(
+                                      fontSize: 14, color: Colors.blueGrey)
+                                  : const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800),
+                            ),
+                          );
                         },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.all(1.0))),
-                        child: Text(
-                          widget.tabList[index].name,
-                          style: index != _current
-                              ? const TextStyle(
-                                  fontSize: 14, color: Colors.blueGrey)
-                              : const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w800),
-                        ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                    // : Container(
+                    //     margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                    //     child: TextButton(
+                    //       onPressed: () {},
+                    //       style: ButtonStyle(
+                    //         padding: MaterialStateProperty.all(
+                    //             const EdgeInsets.all(1.0)),
+                    //       ),
+                    //       child: Text(
+                    //         widget.tabNodes[index],
+                    //         style: const TextStyle(
+                    //             fontSize: 14,
+                    //             fontWeight: FontWeight.normal,
+                    //             color: Colors.grey),
+                    //       ),
+                    //     ),
+                    //   );
+                  },
                 );
-                // : Container(
-                //     margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-                //     child: TextButton(
-                //       onPressed: () {},
-                //       style: ButtonStyle(
-                //         padding: MaterialStateProperty.all(
-                //             const EdgeInsets.all(1.0)),
-                //       ),
-                //       child: Text(
-                //         widget.tabNodes[index],
-                //         style: const TextStyle(
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.normal,
-                //             color: Colors.grey),
-                //       ),
-                //     ),
-                //   );
-              },
-            ),
-          ),
+              })),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.end,
           //   children: [

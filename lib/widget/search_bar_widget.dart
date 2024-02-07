@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/topic_model.dart';
+import 'package:v2es/providers/data_provider.dart';
+import 'package:v2es/service/home_service.dart';
 import 'package:v2es/util/common_util.dart';
 
 class MySearchBar extends StatefulWidget {
-  const MySearchBar(
-      {super.key, required this.isFixed, this.onSearch, this.topicHotList});
+  const MySearchBar({super.key, required this.isFixed, this.onSearch});
 
   final Function(String)? onSearch;
   final bool isFixed;
-  final List<TopicHead>? topicHotList;
+
+  // final List<TopicHead>? topicHotList = [];
 
   @override
   State<MySearchBar> createState() => _MySearchBarState();
@@ -17,7 +20,7 @@ class MySearchBar extends StatefulWidget {
 
 class _MySearchBarState extends State<MySearchBar>
     with SingleTickerProviderStateMixin {
-  List<TopicHead> _textList = [];
+  List<TopicHead> _textList = HomeService.topicHeadList;
   int currentIndex = 0;
   double opacity = 1.0;
 
@@ -34,10 +37,10 @@ class _MySearchBarState extends State<MySearchBar>
   @override
   void initState() {
     super.initState();
-    if (null != widget.topicHotList) {
-      _textList = widget.topicHotList!;
-      startTextAnimation();
-    }
+    // if (null != widget.topicHotList) {
+    // _textList = widget.topicHotList!;
+    startTextAnimation();
+    // }
   }
 
   void startTextAnimation() {

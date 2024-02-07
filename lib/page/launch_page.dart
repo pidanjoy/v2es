@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/providers/data_provider.dart';
+import 'package:v2es/service/home_service.dart';
 import 'package:v2es/util/common_util.dart';
 
 class LaunchPage extends StatefulWidget {
@@ -42,7 +43,10 @@ class _LaunchPageState extends State<LaunchPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  ref.refresh(homeDataProviderProvider);
+                  var homeData = ref.refresh(homeDataProviderProvider);
+                  HomeService.tabList = homeData.value?.tabList ?? [];
+                  HomeService.topicHeadList =
+                      homeData.value?.topicHeadList ?? [];
                 },
                 child: const Text("重试"),
               ),
