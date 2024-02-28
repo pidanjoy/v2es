@@ -14,11 +14,8 @@ import 'package:v2es/util/http_util.dart';
 import 'package:html/parser.dart' as html_parse;
 
 class NodeApi {
-
-  static String currentTab = "hot";
-
   static Future<HomeData> getHomeData(
-      {Map<String, dynamic>? headers}) async {
+      {Map<String, dynamic>? headers, String currentTab = "hot"}) async {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }

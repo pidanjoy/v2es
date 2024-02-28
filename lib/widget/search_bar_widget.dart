@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/providers/data_provider.dart';
@@ -20,7 +21,7 @@ class MySearchBar extends StatefulWidget {
 
 class _MySearchBarState extends State<MySearchBar>
     with SingleTickerProviderStateMixin {
-  List<TopicHead> _textList = HomeService.topicHeadList;
+  final List<TopicHead> _textList = AppConfig.topicHeadList;
   int currentIndex = 0;
   double opacity = 1.0;
 
@@ -39,7 +40,7 @@ class _MySearchBarState extends State<MySearchBar>
     super.initState();
     // if (null != widget.topicHotList) {
     // _textList = widget.topicHotList!;
-    startTextAnimation();
+    // startTextAnimation();
     // }
   }
 

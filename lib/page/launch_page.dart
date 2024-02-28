@@ -43,10 +43,10 @@ class _LaunchPageState extends State<LaunchPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  var homeData = ref.refresh(homeDataProviderProvider);
-                  HomeService.tabList = homeData.value?.tabList ?? [];
-                  HomeService.topicHeadList =
-                      homeData.value?.topicHeadList ?? [];
+                  ref.refresh(homeDataProviderProvider);
+                  // HomeService.tabList = homeData.value?.tabList ?? [];
+                  // HomeService.topicHeadList =
+                  // homeData.value?.topicHeadList ?? [];
                 },
                 child: const Text("重试"),
               ),
@@ -116,25 +116,19 @@ class _LaunchPageState extends State<LaunchPage> {
               Consumer(
                 builder: (context, ref, _) {
                   final homeData = ref.watch(homeDataProviderProvider);
-                  debugPrint("zzz${homeData}");
                   return homeData.when(
                     error: (err, stack) {
-                      debugPrint("aaa${homeData}");
                       return _errorWidget(context, ref);
                     },
                     loading: () =>
                         Image.asset("assets/images/nyan-cat.gif", width: 100),
                     data: (homeData) {
                       if (homeData.isEmpty()) {
-                        debugPrint("bbb${homeData}");
                         return _errorWidget(context, ref);
                       }
-                      debugPrint("ccc${homeData}");
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        debugPrint("eeee${homeData}");
                         CommonUtil.routeTo(context, RouteName.home);
                       });
-                      debugPrint("xxx${homeData}");
                       return Container();
                     },
                   );

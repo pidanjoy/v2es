@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:v2es/api/login_api.dart';
 import 'package:v2es/model/login_model.dart';

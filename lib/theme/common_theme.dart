@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:v2es/config/app_config.dart';
 
 class CommonTheme {
   static const double normalFontSize = 15;
@@ -24,12 +23,12 @@ class CommonTheme {
     primarySwatch: Colors.red,
     primaryColor: Colors.red,
     hintColor: Colors.blue,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       bodyLarge:
           TextStyle(fontSize: normalFontSize, color: lightThemeTextColor),
     ),
-    buttonTheme: ButtonThemeData(height: 25, minWidth: 10),
-    cardTheme: CardTheme(color: cardColorLight, elevation: 20),
+    buttonTheme: const ButtonThemeData(height: 25, minWidth: 10),
+    cardTheme: const CardTheme(color: cardColorLight, elevation: 20),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -41,10 +40,10 @@ class CommonTheme {
     primarySwatch: Colors.blueGrey,
     primaryColor: Colors.blueGrey,
     hintColor: Colors.blue,
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
         labelLarge:
             TextStyle(fontSize: normalFontSize, color: darkThemeTextColor)),
-    buttonTheme: ButtonThemeData(height: 25, minWidth: 10),
-    cardTheme: CardTheme(color: cardColorDark, elevation: 20),
+    buttonTheme: const ButtonThemeData(height: 25, minWidth: 10),
+    cardTheme: const CardTheme(color: cardColorDark, elevation: 20),
   );
 }

@@ -55,17 +55,11 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 alignment: Alignment.topLeft,
-                child: Column(
+                child: const Column(
                   children: [
-                    MySearchBar(
-                      isFixed: true,
-                    ),
-                    MyTabBar(
-                    ),
-                    Expanded(
-                      child: TopicList()
-                          // topicHeadList: homeData.value?.topicHeadList ?? []),
-                    ),
+                    MySearchBar(isFixed: true),
+                    MyTabBar(),
+                    Expanded(child: TopicList()),
                   ],
                 ),
               ),

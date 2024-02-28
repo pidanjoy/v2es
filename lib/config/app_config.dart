@@ -3,6 +3,8 @@ import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:v2es/model/config_model.dart';
+import 'package:v2es/model/node_model.dart';
+import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/util/common_util.dart';
 
 class AppConfig {
@@ -11,6 +13,9 @@ class AppConfig {
   late bool _autoSignIn;
   late String _v2Cookie;
   late ProxyParams _proxyParams;
+
+  static List<NodeTab> tabList = [];
+  static List<TopicHead> topicHeadList = [];
 
   String get appName => _appName;
 
