@@ -1,7 +1,9 @@
-import 'package:v2es/model/node_model.dart';
-import 'package:v2es/model/topic_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:v2es/model/cache_model.dart';
+import 'package:v2es/providers/data_provider.dart';
 
 class HomeService {
-  static List<NodeTab> tabList = [];
-  static List<TopicHead> topicHeadList = [];
+  static HomeData refreshHomeData(WidgetRef ref) {
+    return ref.refresh(homeDataProviderProvider).value ?? HomeData.empty();
+  }
 }

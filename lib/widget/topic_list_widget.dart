@@ -4,37 +4,29 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // import 'package:provider/provider.dart';
 import 'package:v2es/api/node_api.dart';
+import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/providers/data_provider.dart';
+import 'package:v2es/service/home_service.dart';
 import 'package:v2es/widget/image_load_widget.dart';
 import 'package:v2es/widget/keep_alive_wrapper.dart';
 import 'package:v2es/widget/text_tag_widget.dart';
 
 import '../util/common_util.dart';
 
-class TopicList extends StatefulWidget {
+class TopicList extends ConsumerStatefulWidget {
   const TopicList({super.key});
 
-  // final List<TopicHead> topicHeadList;
-
   @override
-  State<TopicList> createState() => _TopicListState();
+  ConsumerState<TopicList> createState() => _TopicListState();
 }
 
-class _TopicListState extends State<TopicList> {
+class _TopicListState extends ConsumerState<TopicList> {
   bool _isLoadingMore = true;
   bool _noMoreItems = true;
-  // List<TopicHead> _topicHeadList = [];
 
-  // late HomeData homeDataProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    // _topicHeadList = widget.topicHeadList;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +36,25 @@ class _TopicListState extends State<TopicList> {
         loading: () => const CircularProgressIndicator(),
         error: (err, stack) => Text('Error: $err'),
         data: (data) {
+          var topicHeadList = data.isEmpty() ? [] : data.topicHeadList;
           return RefreshIndicator(
             onRefresh: () async {
-              ref.refresh(homeDataProviderProvider);
+              HomeService.refreshHomeData(ref);
             },
-            child: Consumer(builder: (context, ref, _) {
-              final homeData = ref.watch(homeDataProviderProvider);
-              var _topicHeadList = homeData.value?.topicHeadList ?? [];
-
-              return ListView.separated(
+            child: ListView.separated(
                 itemCount: _isLoadingMore
-                    ? _topicHeadList.length + 1
-                    : _topicHeadList.length + (_noMoreItems ? 1 : 0),
+                    ? topicHeadList.length + 1
+                    : topicHeadList.length + (_noMoreItems ? 1 : 0),
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 0);
                   // return const Divider();
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  if (_isLoadingMore && index == _topicHeadList.length) {
+                  if (_isLoadingMore && index == topicHeadList.length) {
                     _startNoMoreItemsTimer();
                     return _buildLoadingIndicator();
                   }
-                  if (_noMoreItems && index == _topicHeadList.length) {
+                  if (_noMoreItems && index == topicHeadList.length) {
                     return _buildNoMoreItemsText();
                   }
                   return KeepAliveWrapper(
@@ -80,7 +69,7 @@ class _TopicListState extends State<TopicList> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(1),
                             child: ImageLoader(
-                              imageUrl: _topicHeadList[index].avatar ??
+                              imageUrl: topicHeadList[index].avatar ??
                                   "https://crates.io/assets/cargo.png",
                             ),
                           ),
@@ -90,7 +79,7 @@ class _TopicListState extends State<TopicList> {
                         children: [
                           Flexible(
                             child: Text(
-                              _topicHeadList[index].title,
+                              topicHeadList[index].title,
                               style: const TextStyle(
                                 fontSize: 12.5,
                               ),
@@ -105,8 +94,8 @@ class _TopicListState extends State<TopicList> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            children: null != _topicHeadList[index].rankUp &&
-                                    _topicHeadList[index].rankUp != 0
+                            children: null != topicHeadList[index].rankUp &&
+                                    topicHeadList[index].rankUp != 0
                                 ? [
                                     const Icon(
                                       Icons.arrow_drop_up,
@@ -114,7 +103,7 @@ class _TopicListState extends State<TopicList> {
                                       size: 16,
                                     ),
                                     Text(
-                                      _topicHeadList[index].rankUp.toString(),
+                                      topicHeadList[index].rankUp.toString(),
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -126,7 +115,7 @@ class _TopicListState extends State<TopicList> {
                                 : [],
                           ),
                           TextTag(
-                            text: _topicHeadList[index].nodeTitle!,
+                            text: topicHeadList[index].nodeTitle!,
                             margin: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                           ),
                           const SizedBox(
@@ -134,7 +123,7 @@ class _TopicListState extends State<TopicList> {
                           ),
                           Text(
                             CommonUtil.limitText(
-                                _topicHeadList[index].authorName ?? "", 15),
+                                topicHeadList[index].authorName ?? "", 15),
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(77, 77, 77, 1.0),
@@ -145,9 +134,9 @@ class _TopicListState extends State<TopicList> {
                           ),
                           Expanded(child: Container()),
                           Text(
-                            null != _topicHeadList[index].lastReplyTime
+                            null != topicHeadList[index].lastReplyTime
                                 ? CommonUtil.formatTimeDifference(
-                                    _topicHeadList[index].lastReplyTime!)
+                                    topicHeadList[index].lastReplyTime!)
                                 : "刚刚",
                             style: const TextStyle(fontSize: 10),
                           ),
@@ -158,7 +147,7 @@ class _TopicListState extends State<TopicList> {
                             radius: 8.5,
                             backgroundColor: Colors.grey,
                             child: Text(
-                              _topicHeadList[index].replyQty.toString() ?? "-",
+                              topicHeadList[index].replyQty.toString() ?? "-",
                               style: const TextStyle(
                                 fontSize: 9,
                                 color: Colors.white,
@@ -168,24 +157,14 @@ class _TopicListState extends State<TopicList> {
                         ],
                       ),
                       onTap: () => CommonUtil.routeTo(context, RouteName.topic,
-                          arguments: _topicHeadList[index].href),
+                          arguments: topicHeadList[index].href),
                     ),
                   );
-                },
-              );
-            }),
+                }),
           );
         },
       );
     });
-  }
-
-  Future<void> _refreshTopics() async {
-    // HomeData data = await NodeApi.getHomeData();
-    // await homeDataProvider.saveData(
-    //     tabList: data.tabList,
-    //     topicHeadList: data.topicHeadList,
-    //     topicHotList: data.topicHotList);
   }
 
   Widget _buildLoadingIndicator() {
@@ -195,14 +174,6 @@ class _TopicListState extends State<TopicList> {
     Future.delayed(const Duration(seconds: 2), () {
       EasyLoading.dismiss();
     });
-    // return Consumer<HomeData>(
-    //   builder: (context, HomeData homeDataProvider, child) => const Padding(
-    //     padding: EdgeInsets.all(16.0),
-    //     child: Center(
-    //       child: CircularProgressIndicator(),
-    //     ),
-    //   ),
-    // );
     return const Padding(
       padding: EdgeInsets.all(16.0),
       child: Center(

@@ -7,21 +7,19 @@ import 'package:v2es/model/node_model.dart';
 
 part 'data_provider.g.dart';
 
-// final homeDataProvider = StreamProvider<HomeData>((ref) async* {
-//   final data = await NodeApi.getHomeData();
-//
-// });
-
-final tabProvider = StateProvider((ref) => "hot");
+final tabIndexProvider = StateProvider((ref) => 0);
 
 @riverpod
 Future<HomeData> homeDataProvider(HomeDataProviderRef ref) async {
-  var tabProviderData = ref.watch(tabProvider);
+  var tabProviderData = ref.watch(tabIndexProvider);
+  var tabHref = AppConfig.tabList.isEmpty
+      ? AppConfig.defaultTab
+      : AppConfig.tabList[tabProviderData].href;
 
-  HomeData homeData = await NodeApi.getHomeData(currentTab: tabProviderData);
-  if (AppConfig.topicHeadList.isEmpty || AppConfig.tabList.isEmpty) {
-    AppConfig.topicHeadList = homeData.topicHeadList;
+  var homeData = await NodeApi.getHomeData(currentTab: tabHref);
+  if (AppConfig.tabList.isEmpty || AppConfig.topicHotList.isEmpty) {
     AppConfig.tabList = homeData.tabList;
+    AppConfig.topicHotList = homeData.topicHotList;
   }
   return homeData;
 }

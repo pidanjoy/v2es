@@ -21,7 +21,7 @@ class MySearchBar extends StatefulWidget {
 
 class _MySearchBarState extends State<MySearchBar>
     with SingleTickerProviderStateMixin {
-  final List<TopicHead> _textList = AppConfig.topicHeadList;
+  final List<TopicHead> _textList = AppConfig.topicHotList;
   int currentIndex = 0;
   double opacity = 1.0;
 

@@ -43,10 +43,7 @@ class _LaunchPageState extends State<LaunchPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  ref.refresh(homeDataProviderProvider);
-                  // HomeService.tabList = homeData.value?.tabList ?? [];
-                  // HomeService.topicHeadList =
-                  // homeData.value?.topicHeadList ?? [];
+                  HomeService.refreshHomeData(ref);
                 },
                 child: const Text("重试"),
               ),

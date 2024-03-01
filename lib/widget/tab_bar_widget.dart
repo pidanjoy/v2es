@@ -4,21 +4,15 @@ import 'package:v2es/config/app_config.dart';
 import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/util/common_util.dart';
 
-class MyTabBar extends StatefulWidget {
+class MyTabBar extends ConsumerWidget {
   const MyTabBar({
     super.key,
   });
 
   @override
-  State<MyTabBar> createState() => _MyTabBarState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(tabIndexProvider);
 
-class _MyTabBarState extends State<MyTabBar> {
-  final _tabList = AppConfig.tabList;
-  int _current = 0;
-
-  @override
-  Widget build(BuildContext context) {
     return SizedBox(
       height: 35,
       child: Stack(
@@ -27,7 +21,7 @@ class _MyTabBarState extends State<MyTabBar> {
             width: CommonUtil.getScreenWidth(context) - 40,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _tabList.length,
+              itemCount: AppConfig.tabList.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
@@ -36,21 +30,16 @@ class _MyTabBarState extends State<MyTabBar> {
                     builder: (context, ref, _) {
                       return TextButton(
                         onPressed: () {
-                          if (_current != index) {
-                            ref
-                                .read(tabProvider.notifier)
-                                .update((state) => _tabList[index].href);
+                          if (current != index) {
+                            ref.watch(tabIndexProvider.notifier).state = index;
                           }
-                          setState(() {
-                            _current = index;
-                          });
                         },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all(
                                 const EdgeInsets.all(1.0))),
                         child: Text(
-                          _tabList[index].name,
-                          style: index != _current
+                          AppConfig.tabList[index].name,
+                          style: index != current
                               ? const TextStyle(
                                   fontSize: 14, color: Colors.blueGrey)
                               : const TextStyle(

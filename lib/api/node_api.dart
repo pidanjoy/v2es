@@ -15,15 +15,15 @@ import 'package:html/parser.dart' as html_parse;
 
 class NodeApi {
   static Future<HomeData> getHomeData(
-      {Map<String, dynamic>? headers, String currentTab = "hot"}) async {
+      {Map<String, dynamic>? headers,
+      String currentTab = AppConfig.defaultTab}) async {
     if (null != headers) {
       HttpUtil.setHeaders(headers);
     }
 
     Response response;
     try {
-      String params = "?tab=$currentTab";
-      response = await HttpUtil.get(ApiEndpoints.baseUrl + params);
+      response = await HttpUtil.get(ApiEndpoints.baseUrl + currentTab);
     } catch (e) {
       return HomeData.empty();
     }
@@ -79,7 +79,6 @@ class NodeApi {
           if (null == rankUp || rankUp.isEmpty) {
             rankUp = "0";
           }
-          // debugPrint("xxx =-> $rankUp");
           DateTime? lastReplyTime;
           var replyTime =
               eleTopicInfo?.getElementsByTagName("span")[0].attributes['title'];
@@ -118,7 +117,6 @@ class NodeApi {
               eleArr[0].getElementsByTagName("img")[0].attributes['src'];
           var hotTitle = eleArr[1].text;
           var hotHref = eleArr[1].attributes['href'];
-          debugPrint("$hotAuthorHref,$hotAvatar,$hotTitle,$hotHref");
           if (null != hotHref) {
             topicHotList.add(TopicHead(hotTitle, hotHref,
                 avatar: hotAvatar, authorHref: hotAuthorHref));

@@ -14,8 +14,9 @@ class AppConfig {
   late String _v2Cookie;
   late ProxyParams _proxyParams;
 
+  static const String defaultTab = "/?tab=hot";
   static List<NodeTab> tabList = [];
-  static List<TopicHead> topicHeadList = [];
+  static List<TopicHead> topicHotList = [];
 
   String get appName => _appName;
 
