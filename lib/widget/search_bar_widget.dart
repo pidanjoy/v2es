@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/topic_model.dart';
-import 'package:v2es/providers/data_provider.dart';
-import 'package:v2es/service/home_service.dart';
 import 'package:v2es/util/common_util.dart';
 
 class MySearchBar extends StatefulWidget {
@@ -12,8 +9,6 @@ class MySearchBar extends StatefulWidget {
 
   final Function(String)? onSearch;
   final bool isFixed;
-
-  // final List<TopicHead>? topicHotList = [];
 
   @override
   State<MySearchBar> createState() => _MySearchBarState();
@@ -34,15 +29,6 @@ class _MySearchBarState extends State<MySearchBar>
   late final AnimationController _planController =
       AnimationController(duration: const Duration(seconds: 720), vsync: this)
         ..repeat();
-
-  @override
-  void initState() {
-    super.initState();
-    // if (null != widget.topicHotList) {
-    // _textList = widget.topicHotList!;
-    // startTextAnimation();
-    // }
-  }
 
   void startTextAnimation() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -65,20 +51,15 @@ class _MySearchBarState extends State<MySearchBar>
   }
 
   void switchSearchType() {
-    setState(() {
-      if (_searchType == 0) {
-        _searchType = 1;
-        _searchIcon = v2exIcon;
-      } else {
-        _searchType = 0;
-        _searchIcon = googleIcon;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    // setState(() {
+      // if (_searchType == 0) {
+      //   _searchType = 1;
+      //   _searchIcon = v2exIcon;
+      // } else {
+      //   _searchType = 0;
+      //   _searchIcon = googleIcon;
+      // }
+    // });
   }
 
   @override

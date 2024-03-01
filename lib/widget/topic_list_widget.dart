@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// import 'package:provider/provider.dart';
-import 'package:v2es/api/node_api.dart';
-import 'package:v2es/config/app_config.dart';
 import 'package:v2es/constant/base_constant.dart';
-import 'package:v2es/model/cache_model.dart';
-import 'package:v2es/model/topic_model.dart';
 import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/service/home_service.dart';
 import 'package:v2es/widget/image_load_widget.dart';
@@ -26,35 +20,44 @@ class TopicList extends ConsumerStatefulWidget {
 class _TopicListState extends ConsumerState<TopicList> {
   bool _isLoadingMore = true;
   bool _noMoreItems = true;
-
+  var _topicHeadList = [];
 
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
       final homeData = ref.watch(homeDataProviderProvider);
       return homeData.when(
-        loading: () => const CircularProgressIndicator(),
-        error: (err, stack) => Text('Error: $err'),
+        loading: () {
+          EasyLoading.show();
+          return Container();
+        },
+        error: (err, stack) {
+          EasyLoading.showError(err.toString());
+          return Text('Error: $err');
+        },
         data: (data) {
-          var topicHeadList = data.isEmpty() ? [] : data.topicHeadList;
+          EasyLoading.dismiss();
+          if (!data.isEmpty()) {
+            _topicHeadList = data.topicHeadList;
+          }
           return RefreshIndicator(
             onRefresh: () async {
               HomeService.refreshHomeData(ref);
             },
             child: ListView.separated(
                 itemCount: _isLoadingMore
-                    ? topicHeadList.length + 1
-                    : topicHeadList.length + (_noMoreItems ? 1 : 0),
+                    ? _topicHeadList.length + 1
+                    : _topicHeadList.length + (_noMoreItems ? 1 : 0),
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 0);
                   // return const Divider();
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  if (_isLoadingMore && index == topicHeadList.length) {
+                  if (_isLoadingMore && index == _topicHeadList.length) {
                     _startNoMoreItemsTimer();
                     return _buildLoadingIndicator();
                   }
-                  if (_noMoreItems && index == topicHeadList.length) {
+                  if (_noMoreItems && index == _topicHeadList.length) {
                     return _buildNoMoreItemsText();
                   }
                   return KeepAliveWrapper(
@@ -69,7 +72,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(1),
                             child: ImageLoader(
-                              imageUrl: topicHeadList[index].avatar ??
+                              imageUrl: _topicHeadList[index].avatar ??
                                   "https://crates.io/assets/cargo.png",
                             ),
                           ),
@@ -79,7 +82,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                         children: [
                           Flexible(
                             child: Text(
-                              topicHeadList[index].title,
+                              _topicHeadList[index].title,
                               style: const TextStyle(
                                 fontSize: 12.5,
                               ),
@@ -94,8 +97,8 @@ class _TopicListState extends ConsumerState<TopicList> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            children: null != topicHeadList[index].rankUp &&
-                                    topicHeadList[index].rankUp != 0
+                            children: null != _topicHeadList[index].rankUp &&
+                                    _topicHeadList[index].rankUp != 0
                                 ? [
                                     const Icon(
                                       Icons.arrow_drop_up,
@@ -103,7 +106,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                                       size: 16,
                                     ),
                                     Text(
-                                      topicHeadList[index].rankUp.toString(),
+                                      _topicHeadList[index].rankUp.toString(),
                                       style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
@@ -115,7 +118,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                                 : [],
                           ),
                           TextTag(
-                            text: topicHeadList[index].nodeTitle!,
+                            text: _topicHeadList[index].nodeTitle!,
                             margin: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                           ),
                           const SizedBox(
@@ -123,7 +126,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                           ),
                           Text(
                             CommonUtil.limitText(
-                                topicHeadList[index].authorName ?? "", 15),
+                                _topicHeadList[index].authorName ?? "", 15),
                             style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(77, 77, 77, 1.0),
@@ -134,9 +137,9 @@ class _TopicListState extends ConsumerState<TopicList> {
                           ),
                           Expanded(child: Container()),
                           Text(
-                            null != topicHeadList[index].lastReplyTime
+                            null != _topicHeadList[index].lastReplyTime
                                 ? CommonUtil.formatTimeDifference(
-                                    topicHeadList[index].lastReplyTime!)
+                                    _topicHeadList[index].lastReplyTime!)
                                 : "刚刚",
                             style: const TextStyle(fontSize: 10),
                           ),
@@ -147,7 +150,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                             radius: 8.5,
                             backgroundColor: Colors.grey,
                             child: Text(
-                              topicHeadList[index].replyQty.toString() ?? "-",
+                              _topicHeadList[index].replyQty.toString() ?? "-",
                               style: const TextStyle(
                                 fontSize: 9,
                                 color: Colors.white,
@@ -157,7 +160,7 @@ class _TopicListState extends ConsumerState<TopicList> {
                         ],
                       ),
                       onTap: () => CommonUtil.routeTo(context, RouteName.topic,
-                          arguments: topicHeadList[index].href),
+                          arguments: _topicHeadList[index].href),
                     ),
                   );
                 }),
@@ -168,12 +171,12 @@ class _TopicListState extends ConsumerState<TopicList> {
   }
 
   Widget _buildLoadingIndicator() {
-    EasyLoading.show(
-      status: '加载中',
-    );
-    Future.delayed(const Duration(seconds: 2), () {
-      EasyLoading.dismiss();
-    });
+    // EasyLoading.show(
+    //   status: '加载中',
+    // );
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   EasyLoading.dismiss();
+    // });
     return const Padding(
       padding: EdgeInsets.all(16.0),
       child: Center(
@@ -198,7 +201,7 @@ class _TopicListState extends ConsumerState<TopicList> {
   }
 
   void _startNoMoreItemsTimer() {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
         setState(() {
           _isLoadingMore = false;

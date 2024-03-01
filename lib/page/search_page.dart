@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:v2es/api/google_api.dart';
+import 'package:v2es/constant/base_constant.dart';
 import 'package:v2es/model/google_model.dart';
+import 'package:v2es/util/common_util.dart';
 import 'package:v2es/widget/search_bar_widget.dart';
 
 class SearchPage extends StatefulWidget {
@@ -41,14 +44,18 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void onSearch(String text) async {
+    EasyLoading.show();
     debugPrint("[onSearch]$text");
     if (text.isEmpty) {
+      EasyLoading.dismiss();
       return;
     }
     List<GoogleSearchTopic> list = await GoogleApi.search(text);
     setState(() {
+      _topicSearchList.clear();
       _topicSearchList.addAll(list);
     });
+    EasyLoading.dismiss();
   }
 
   @override
@@ -71,6 +78,9 @@ class _SearchPageState extends State<SearchPage> {
                         setState(() {
                           _topicSearchList[index].isClick = true;
                         });
+                        debugPrint("G:${_topicSearchList[index].href}");
+                        CommonUtil.routeTo(context, RouteName.topic,
+                            arguments: _topicSearchList[index].href);
                       },
                       child: ListTile(
                         title: Text(

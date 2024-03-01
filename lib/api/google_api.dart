@@ -28,6 +28,7 @@ class GoogleApi {
         var subtitle =
             content.querySelector('div[style="-webkit-line-clamp:2"]')?.text;
         if (null != href && null != title && null != subtitle) {
+          href = href.replaceAll("https://www.v2ex.com", "");
           list.add(GoogleSearchTopic(title, href, subtitle));
         }
       }

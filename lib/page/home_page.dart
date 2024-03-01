@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// import 'package:provider/provider.dart';
-import 'package:v2es/model/cache_model.dart';
 import 'package:v2es/page/my_page.dart';
-import 'package:v2es/page/notebook_page.dart';
-import 'package:v2es/page/timeline_page.dart';
 import 'package:v2es/page/write_page.dart';
-import 'package:v2es/providers/data_provider.dart';
 import 'package:v2es/widget/search_bar_widget.dart';
 import 'package:v2es/widget/tab_bar_widget.dart';
 import 'package:v2es/widget/topic_list_widget.dart';
@@ -63,9 +56,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              // const NotebookPage(),
               const WritePage(),
-              // const TimelinePage(),
               const MyPage(),
             ],
           ),
@@ -81,15 +72,15 @@ class _HomePageState extends State<HomePage> {
             border: Border.all(color: Colors.white, width: 3),
             borderRadius: BorderRadius.circular(40)),
         child: FloatingActionButton(
-          backgroundColor: _index == 2 ? Colors.deepPurple : Colors.white,
-          elevation: 5,
+          backgroundColor: _index == 1 ? Colors.deepPurple : Colors.white,
+          elevation: 3,
           onPressed: () {
             setState(() {
-              _index = 2;
+              _index = 1;
               _pageController.jumpToPage(_index);
             });
           },
-          child: _index == 2
+          child: _index == 1
               ? const Icon(
                   Icons.edit,
                   size: 32,
@@ -117,12 +108,8 @@ class _HomePageState extends State<HomePage> {
       items: [
         initBottomNavigationBarItem(
             "首页", Icons.home_rounded, Icons.home_work_rounded),
-        // initBottomNavigationBarItem(
-        //     "记事本", Icons.book_rounded, Icons.menu_book_rounded),
         initBottomNavigationBarItem(
             "创作", Icons.note_add_rounded, Icons.note_alt_rounded),
-        // initBottomNavigationBarItem(
-        //     "时间轴", Icons.linear_scale, Icons.linear_scale_rounded),
         initBottomNavigationBarItem(
             "我的", Icons.android_rounded, Icons.insert_emoticon_rounded),
       ],

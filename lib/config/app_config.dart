@@ -17,6 +17,8 @@ class AppConfig {
   static const String defaultTab = "/?tab=hot";
   static List<NodeTab> tabList = [];
   static List<TopicHead> topicHotList = [];
+  static Map<String, DateTime> tabTopicRefreshTimeMap = {};
+  static Map<String, List<TopicHead>> tabTopicListMap = {};
 
   String get appName => _appName;
 

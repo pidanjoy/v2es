@@ -198,84 +198,84 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: DefaultTabController(
-                  length: 7,
-                  child: Scaffold(
-                    appBar: AppBar(
-                      title: Center(
-                        child: TabBar(
-                          isScrollable: true,
-                          tabs: [
-                            Tab(
-                              text: "回复",
-                            ),
-                            Tab(
-                              text: "提问",
-                            ),
-                            Tab(
-                              text: "技术",
-                            ),
-                            Tab(
-                              text: "好玩",
-                            ),
-                            Tab(
-                              text: "工作",
-                            ),
-                            Tab(
-                              text: "交易",
-                            ),
-                            Tab(
-                              text: "城市",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    body: TabBarView(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: ListView(
-                            children: [
-                              Container(height: 100, color: Colors.cyan),
-                              Container(height: 100, color: Colors.red),
-                              Container(height: 100, color: Colors.grey),
-                              Container(height: 100, color: Colors.white),
-                              Container(height: 100, color: Colors.yellow),
-                              Container(height: 100, color: Colors.deepPurple),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("2"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("3"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("4"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("5"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("6"),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("7"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: DefaultTabController(
+              //     length: 7,
+              //     child: Scaffold(
+              //       appBar: AppBar(
+              //         title: Center(
+              //           child: TabBar(
+              //             isScrollable: true,
+              //             tabs: [
+              //               Tab(
+              //                 text: "回复",
+              //               ),
+              //               Tab(
+              //                 text: "提问",
+              //               ),
+              //               Tab(
+              //                 text: "技术",
+              //               ),
+              //               Tab(
+              //                 text: "好玩",
+              //               ),
+              //               Tab(
+              //                 text: "工作",
+              //               ),
+              //               Tab(
+              //                 text: "交易",
+              //               ),
+              //               Tab(
+              //                 text: "城市",
+              //               ),
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //       body: TabBarView(
+              //         children: [
+              //           Padding(
+              //             padding: const EdgeInsets.all(2.0),
+              //             child: ListView(
+              //               children: [
+              //                 Container(height: 100, color: Colors.cyan),
+              //                 Container(height: 100, color: Colors.red),
+              //                 Container(height: 100, color: Colors.grey),
+              //                 Container(height: 100, color: Colors.white),
+              //                 Container(height: 100, color: Colors.yellow),
+              //                 Container(height: 100, color: Colors.deepPurple),
+              //               ],
+              //             ),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("2"),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("3"),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("4"),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("5"),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("6"),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.all(8.0),
+              //             child: Text("7"),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

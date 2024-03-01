@@ -33,8 +33,6 @@ class NodeApi {
     List<NodeTab> tabList = [];
     var eleTabs = document.querySelectorAll('a[href^="/?tab="]');
     for (var tab in eleTabs) {
-      debugPrint(
-          "${tab.text}：${tab.attributes['href']} ${tab.attributes['class'] == 'tab_current' ? '*' : ''}");
       var tabName = tab.text;
       var tabHref = tab.attributes['href'];
       if (null != tabHref) {

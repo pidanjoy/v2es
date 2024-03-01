@@ -12,6 +12,7 @@ final tabIndexProvider = StateProvider((ref) => 0);
 @riverpod
 Future<HomeData> homeDataProvider(HomeDataProviderRef ref) async {
   var tabProviderData = ref.watch(tabIndexProvider);
+
   var tabHref = AppConfig.tabList.isEmpty
       ? AppConfig.defaultTab
       : AppConfig.tabList[tabProviderData].href;
