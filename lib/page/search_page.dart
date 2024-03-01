@@ -14,32 +14,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  // late WebViewController? _webViewController;
-
   final List<GoogleSearchTopic> _topicSearchList = [];
 
   @override
   void initState() {
-    // _webViewController = WebViewController()
-    //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    //   ..setBackgroundColor(const Color(0x00000000))
-    //   ..setNavigationDelegate(
-    //     NavigationDelegate(
-    //       onProgress: (int progress) {
-    //         // Update loading bar.
-    //       },
-    //       onPageStarted: (String url) {},
-    //       onPageFinished: (String url) {},
-    //       onWebResourceError: (WebResourceError error) {},
-    //       onNavigationRequest: (NavigationRequest request) {
-    //         if (request.url.startsWith('https://www.v2ex.com/t')) {
-    //           return NavigationDecision.prevent;
-    //         }
-    //         return NavigationDecision.navigate;
-    //       },
-    //     ),
-    //   )
-    //   ..loadRequest(Uri.parse('https://www.google.com/search?q=site%3Av2ex.com%2Ft+%E6%B5%8B%E8%AF%95'));
     super.initState();
   }
 
@@ -69,37 +47,34 @@ class _SearchPageState extends State<SearchPage> {
               onSearch: onSearch,
             ),
             Expanded(
-              // child: WebViewWidget(controller: _webViewController!),
               child: ListView.builder(
                 itemCount: _topicSearchList.length,
-                itemBuilder: (context, index) =>
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _topicSearchList[index].isClick = true;
-                        });
-                        debugPrint("G:${_topicSearchList[index].href}");
-                        CommonUtil.routeTo(context, RouteName.topic,
-                            arguments: _topicSearchList[index].href);
-                      },
-                      child: ListTile(
-                        title: Text(
-                          _topicSearchList[index].title,
-                          style: TextStyle(
-                            color: _topicSearchList[index].isClick
-                                ? const Color.fromRGBO(104, 29, 128, 1)
-                                : Colors.blueAccent,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Text(
-                          _topicSearchList[index].subtitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _topicSearchList[index].isClick = true;
+                    });
+                    CommonUtil.routeTo(context, RouteName.topic,
+                        arguments: _topicSearchList[index].href);
+                  },
+                  child: ListTile(
+                    title: Text(
+                      _topicSearchList[index].title,
+                      style: TextStyle(
+                        color: _topicSearchList[index].isClick
+                            ? const Color.fromRGBO(104, 29, 128, 1)
+                            : Colors.blueAccent,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    subtitle: Text(
+                      _topicSearchList[index].subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

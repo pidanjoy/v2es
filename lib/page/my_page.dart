@@ -50,10 +50,10 @@ class _MyPageState extends State<MyPage> {
               // ),
               IconButton(
                 onPressed: () => CommonUtil.routeTo(context, RouteName.setting),
-                icon: Icon(
+                icon: const Icon(
                   Icons.settings,
                   color: Colors.white,
-                  size: 18,
+                  size: 20,
                 ),
               ),
             ],
