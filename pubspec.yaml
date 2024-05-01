@@ -1,0 +1,67 @@
+name: v2es
+description: A new Flutter project.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.3.2
+  html: ^0.15.4
+  path_provider: ^2.1.0
+  # provider: ^6.0.5
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+  shared_preferences: ^2.2.0
+  json_annotation: ^4.8.1
+  flutter_widget_from_html_core: ^0.10.4
+  url_launcher: ^6.1.13
+  flutter_styled_toast: ^2.2.1
+  photo_view: ^0.14.0
+  fluttertoast: ^8.2.2
+  flutter_easyloading: ^3.0.5
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+  riverpod_generator: ^2.3.9
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/googlelogo_color_272x92dp.png
+    - assets/images/icon-196.png
+    - assets/images/google_icon_1x.png
+    - assets/images/v2ex_network.png
+    - assets/images/my_page_bg.png
+    - assets/images/currency/bronze@2x.png
+    - assets/images/currency/gold@2x.png
+    - assets/images/currency/silver@2x.png
+    - assets/images/v2es_logo_startup.png
+    - assets/images/v2es_code_startup.png
+    - assets/images/nyan-cat.gif
+    - assets/images/nyan-cat_0.png
+    - assets/images/nyan-cat-nyan.gif
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
