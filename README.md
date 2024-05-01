@@ -1,3 +1,2 @@
 # v2es
-dart run build_runner build
-dart run build_runner watch
+Flutter application for viewing posts on v2ex.com forum.
