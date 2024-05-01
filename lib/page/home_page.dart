@@ -31,9 +31,9 @@ class _HomePageState extends State<HomePage> {
       // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       // title: Text(widget.title),
       // ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: initFloatingActionButton(),
-      bottomNavigationBar: initBottomNavigationBar(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: initFloatingActionButton(),
+      // bottomNavigationBar: initBottomNavigationBar(),
       body: SafeArea(
         child: Container(
           alignment: Alignment.center,
